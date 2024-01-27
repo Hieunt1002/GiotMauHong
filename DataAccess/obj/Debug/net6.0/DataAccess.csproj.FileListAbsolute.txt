@@ -1,0 +1,15 @@
+D:\JobDoAn\GiotMauHong\DataAccess\bin\Debug\net6.0\DataAccess.deps.json
+D:\JobDoAn\GiotMauHong\DataAccess\bin\Debug\net6.0\DataAccess.dll
+D:\JobDoAn\GiotMauHong\DataAccess\bin\Debug\net6.0\DataAccess.pdb
+D:\JobDoAn\GiotMauHong\DataAccess\bin\Debug\net6.0\BusinessObject.dll
+D:\JobDoAn\GiotMauHong\DataAccess\bin\Debug\net6.0\BusinessObject.pdb
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.csproj.AssemblyReference.cache
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.AssemblyInfoInputs.cache
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.AssemblyInfo.cs
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.csproj.CoreCompileInputs.cache
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.csproj.CopyComplete
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.dll
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\refint\DataAccess.dll
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\DataAccess.pdb
+D:\JobDoAn\GiotMauHong\DataAccess\obj\Debug\net6.0\ref\DataAccess.dll
