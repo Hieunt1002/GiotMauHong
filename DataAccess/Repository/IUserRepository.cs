@@ -11,5 +11,10 @@ namespace DataAccess.Repository
     {
         Users Login(string email, string password);
         void AddUser(Users user);
+        Users getUserid(string email);
+        void AddVolunteers(Volunteers volunteers);
+        Users GetDefaultMember(string email, string password);
+        void ChangePass(Users users);
+        Users checkpass(string email, string pass);
     }
 }
