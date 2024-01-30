@@ -1,10 +1,3 @@
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.csproj.AssemblyReference.cache
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.GeneratedMSBuildEditorConfig.editorconfig
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.AssemblyInfoInputs.cache
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.AssemblyInfo.cs
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.csproj.CoreCompileInputs.cache
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.MvcApplicationPartsAssemblyInfo.cs
-D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.MvcApplicationPartsAssemblyInfo.cache
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\appsettings.Development.json
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\appsettings.json
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\GiotMauHongAPI.exe
@@ -14,6 +7,7 @@ D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\GiotMauHongAPI.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\GiotMauHongAPI.pdb
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\Azure.Core.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\Azure.Identity.dll
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\BCrypt.Net.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
@@ -86,6 +80,13 @@ D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\BusinessObject.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\DataAccess.dll
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\DataAccess.pdb
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\bin\Debug\net6.0\BusinessObject.pdb
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.csproj.AssemblyReference.cache
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.GeneratedMSBuildEditorConfig.editorconfig
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.AssemblyInfoInputs.cache
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.AssemblyInfo.cs
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.csproj.CoreCompileInputs.cache
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.MvcApplicationPartsAssemblyInfo.cs
+D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\GiotMauHongAPI.MvcApplicationPartsAssemblyInfo.cache
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\staticwebassets\msbuild.GiotMauHongAPI.Microsoft.AspNetCore.StaticWebAssets.props
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\staticwebassets\msbuild.build.GiotMauHongAPI.props
 D:\JobDoAn\GiotMauHong\GiotMauHongAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.GiotMauHongAPI.props

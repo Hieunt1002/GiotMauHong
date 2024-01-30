@@ -98,9 +98,9 @@ namespace GiotMauHongAPI
         private static IEdmModel GetEdmModel()
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-            builder.EntitySet<Users>("Users");
+            builder.EntitySet<Requests>("Requests");
 
-            builder.EntityType<Users>().HasKey(e => e.UserId);
+            builder.EntityType<Requests>().HasKey(e => e.Requestid);
             return builder.GetEdmModel();
         }
     }
