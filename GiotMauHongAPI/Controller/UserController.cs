@@ -39,7 +39,7 @@ namespace GiotMauHongAPI.Controller
             }
             return byte2String;
         }
-    [HttpPost]
+        [HttpPost]
         [Route("login")]
         public ActionResult Login(Login login)
         {
