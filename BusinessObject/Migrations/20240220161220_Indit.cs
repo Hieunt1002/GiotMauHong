@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace BusinessObject.Migrations
 {
     /// <inheritdoc />
-    public partial class Dbinit : Migration
+    public partial class Indit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +38,19 @@ namespace BusinessObject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bloodtypes", x => x.Bloodtypeid);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NumberBlood",
+                columns: table => new
+                {
+                    numberbloodid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NumberBlood", x => x.numberbloodid);
                 });
 
             migrationBuilder.CreateTable(
@@ -194,8 +209,6 @@ namespace BusinessObject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Hospitalid = table.Column<int>(type: "int", nullable: false),
                     Bloodbankid = table.Column<int>(type: "int", nullable: false),
-                    Bloodtypeid = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Datesend = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -207,12 +220,6 @@ namespace BusinessObject.Migrations
                         column: x => x.Bloodbankid,
                         principalTable: "Bloodbank",
                         principalColumn: "Bloodbankid",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SendBlood_Bloodtypes_Bloodtypeid",
-                        column: x => x.Bloodtypeid,
-                        principalTable: "Bloodtypes",
-                        principalColumn: "Bloodtypeid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SendBlood_Hospitals_Hospitalid",
@@ -229,8 +236,6 @@ namespace BusinessObject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Hospitalid = table.Column<int>(type: "int", nullable: false),
                     Bloodbankid = table.Column<int>(type: "int", nullable: false),
-                    Bloodtypeid = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Datetake = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
@@ -242,12 +247,6 @@ namespace BusinessObject.Migrations
                         column: x => x.Bloodbankid,
                         principalTable: "Bloodbank",
                         principalColumn: "Bloodbankid",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Takebloods_Bloodtypes_Bloodtypeid",
-                        column: x => x.Bloodtypeid,
-                        principalTable: "Bloodtypes",
-                        principalColumn: "Bloodtypeid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Takebloods_Hospitals_Hospitalid",
@@ -289,6 +288,84 @@ namespace BusinessObject.Migrations
                         principalColumn: "Volunteerid");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "QuantitySend",
+                columns: table => new
+                {
+                    quantitysendid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    numberbloodid = table.Column<int>(type: "int", nullable: false),
+                    SendBloodid = table.Column<int>(type: "int", nullable: false),
+                    Bloodtypeid = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuantitySend", x => x.quantitysendid);
+                    table.ForeignKey(
+                        name: "FK_QuantitySend_Bloodtypes_Bloodtypeid",
+                        column: x => x.Bloodtypeid,
+                        principalTable: "Bloodtypes",
+                        principalColumn: "Bloodtypeid",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuantitySend_NumberBlood_numberbloodid",
+                        column: x => x.numberbloodid,
+                        principalTable: "NumberBlood",
+                        principalColumn: "numberbloodid",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuantitySend_SendBlood_SendBloodid",
+                        column: x => x.SendBloodid,
+                        principalTable: "SendBlood",
+                        principalColumn: "SendBloodid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuantityTake",
+                columns: table => new
+                {
+                    quantitytakeid = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    numberbloodid = table.Column<int>(type: "int", nullable: false),
+                    Takebloodid = table.Column<int>(type: "int", nullable: false),
+                    Bloodtypeid = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuantityTake", x => x.quantitytakeid);
+                    table.ForeignKey(
+                        name: "FK_QuantityTake_Bloodtypes_Bloodtypeid",
+                        column: x => x.Bloodtypeid,
+                        principalTable: "Bloodtypes",
+                        principalColumn: "Bloodtypeid",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuantityTake_NumberBlood_numberbloodid",
+                        column: x => x.numberbloodid,
+                        principalTable: "NumberBlood",
+                        principalColumn: "numberbloodid",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuantityTake_Takebloods_Takebloodid",
+                        column: x => x.Takebloodid,
+                        principalTable: "Takebloods",
+                        principalColumn: "Takebloodid",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "NumberBlood",
+                columns: new[] { "numberbloodid", "quantity" },
+                values: new object[,]
+                {
+                    { 1, 250 },
+                    { 2, 350 },
+                    { 3, 450 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Images_Activateid",
                 table: "Images",
@@ -298,6 +375,36 @@ namespace BusinessObject.Migrations
                 name: "IX_Notification_Userid",
                 table: "Notification",
                 column: "Userid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuantitySend_Bloodtypeid",
+                table: "QuantitySend",
+                column: "Bloodtypeid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuantitySend_numberbloodid",
+                table: "QuantitySend",
+                column: "numberbloodid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuantitySend_SendBloodid",
+                table: "QuantitySend",
+                column: "SendBloodid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuantityTake_Bloodtypeid",
+                table: "QuantityTake",
+                column: "Bloodtypeid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuantityTake_numberbloodid",
+                table: "QuantityTake",
+                column: "numberbloodid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuantityTake_Takebloodid",
+                table: "QuantityTake",
+                column: "Takebloodid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Registers_Bloodtypeid",
@@ -325,11 +432,6 @@ namespace BusinessObject.Migrations
                 column: "Bloodbankid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SendBlood_Bloodtypeid",
-                table: "SendBlood",
-                column: "Bloodtypeid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SendBlood_Hospitalid",
                 table: "SendBlood",
                 column: "Hospitalid");
@@ -338,11 +440,6 @@ namespace BusinessObject.Migrations
                 name: "IX_Takebloods_Bloodbankid",
                 table: "Takebloods",
                 column: "Bloodbankid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Takebloods_Bloodtypeid",
-                table: "Takebloods",
-                column: "Bloodtypeid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Takebloods_Hospitalid",
@@ -360,16 +457,28 @@ namespace BusinessObject.Migrations
                 name: "Notification");
 
             migrationBuilder.DropTable(
+                name: "QuantitySend");
+
+            migrationBuilder.DropTable(
+                name: "QuantityTake");
+
+            migrationBuilder.DropTable(
                 name: "Registers");
+
+            migrationBuilder.DropTable(
+                name: "Activate");
 
             migrationBuilder.DropTable(
                 name: "SendBlood");
 
             migrationBuilder.DropTable(
+                name: "NumberBlood");
+
+            migrationBuilder.DropTable(
                 name: "Takebloods");
 
             migrationBuilder.DropTable(
-                name: "Activate");
+                name: "Bloodtypes");
 
             migrationBuilder.DropTable(
                 name: "Requests");
@@ -379,9 +488,6 @@ namespace BusinessObject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Bloodbank");
-
-            migrationBuilder.DropTable(
-                name: "Bloodtypes");
 
             migrationBuilder.DropTable(
                 name: "Hospitals");

@@ -138,6 +138,101 @@ namespace BusinessObject.Migrations
                     b.ToTable("Notification");
                 });
 
+            modelBuilder.Entity("BusinessObject.Model.NumberBlood", b =>
+                {
+                    b.Property<int>("numberbloodid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("numberbloodid"));
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("numberbloodid");
+
+                    b.ToTable("NumberBlood");
+
+                    b.HasData(
+                        new
+                        {
+                            numberbloodid = 1,
+                            quantity = 250
+                        },
+                        new
+                        {
+                            numberbloodid = 2,
+                            quantity = 350
+                        },
+                        new
+                        {
+                            numberbloodid = 3,
+                            quantity = 450
+                        });
+                });
+
+            modelBuilder.Entity("BusinessObject.Model.QuantitySend", b =>
+                {
+                    b.Property<int>("quantitysendid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("quantitysendid"));
+
+                    b.Property<int>("Bloodtypeid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SendBloodid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("numberbloodid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("quantitysendid");
+
+                    b.HasIndex("Bloodtypeid");
+
+                    b.HasIndex("SendBloodid");
+
+                    b.HasIndex("numberbloodid");
+
+                    b.ToTable("QuantitySend");
+                });
+
+            modelBuilder.Entity("BusinessObject.Model.QuantityTake", b =>
+                {
+                    b.Property<int>("quantitytakeid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("quantitytakeid"));
+
+                    b.Property<int>("Bloodtypeid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Takebloodid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("numberbloodid")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("quantitytakeid");
+
+                    b.HasIndex("Bloodtypeid");
+
+                    b.HasIndex("Takebloodid");
+
+                    b.HasIndex("numberbloodid");
+
+                    b.ToTable("QuantityTake");
+                });
+
             modelBuilder.Entity("BusinessObject.Model.Registers", b =>
                 {
                     b.Property<int>("RegisterId")
@@ -232,16 +327,10 @@ namespace BusinessObject.Migrations
                     b.Property<int>("Bloodbankid")
                         .HasColumnType("int");
 
-                    b.Property<int>("Bloodtypeid")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Datesend")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Hospitalid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -250,8 +339,6 @@ namespace BusinessObject.Migrations
                     b.HasKey("SendBloodid");
 
                     b.HasIndex("Bloodbankid");
-
-                    b.HasIndex("Bloodtypeid");
 
                     b.HasIndex("Hospitalid");
 
@@ -269,16 +356,10 @@ namespace BusinessObject.Migrations
                     b.Property<int>("Bloodbankid")
                         .HasColumnType("int");
 
-                    b.Property<int>("Bloodtypeid")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Datetake")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Hospitalid")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -287,8 +368,6 @@ namespace BusinessObject.Migrations
                     b.HasKey("Takebloodid");
 
                     b.HasIndex("Bloodbankid");
-
-                    b.HasIndex("Bloodtypeid");
 
                     b.HasIndex("Hospitalid");
 
@@ -411,6 +490,60 @@ namespace BusinessObject.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("BusinessObject.Model.QuantitySend", b =>
+                {
+                    b.HasOne("BusinessObject.Model.Bloodtypes", "Bloodtypes")
+                        .WithMany("QuantitySend")
+                        .HasForeignKey("Bloodtypeid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObject.Model.SendBlood", "SendBlood")
+                        .WithMany("QuantitySends")
+                        .HasForeignKey("SendBloodid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObject.Model.NumberBlood", "NumberBlood")
+                        .WithMany("QuantitySends")
+                        .HasForeignKey("numberbloodid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bloodtypes");
+
+                    b.Navigation("NumberBlood");
+
+                    b.Navigation("SendBlood");
+                });
+
+            modelBuilder.Entity("BusinessObject.Model.QuantityTake", b =>
+                {
+                    b.HasOne("BusinessObject.Model.Bloodtypes", "Bloodtypes")
+                        .WithMany("QuantityTake")
+                        .HasForeignKey("Bloodtypeid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObject.Model.Takebloods", "Takebloods")
+                        .WithMany("QuantityTake")
+                        .HasForeignKey("Takebloodid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BusinessObject.Model.NumberBlood", "NumberBlood")
+                        .WithMany("QuantityTake")
+                        .HasForeignKey("numberbloodid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bloodtypes");
+
+                    b.Navigation("NumberBlood");
+
+                    b.Navigation("Takebloods");
+                });
+
             modelBuilder.Entity("BusinessObject.Model.Registers", b =>
                 {
                     b.HasOne("BusinessObject.Model.Bloodtypes", "Bloodtypes")
@@ -457,12 +590,6 @@ namespace BusinessObject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessObject.Model.Bloodtypes", "Bloodtypes")
-                        .WithMany("SendBloods")
-                        .HasForeignKey("Bloodtypeid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BusinessObject.Model.Hospitals", "Hospitals")
                         .WithMany("SendBloods")
                         .HasForeignKey("Hospitalid")
@@ -470,8 +597,6 @@ namespace BusinessObject.Migrations
                         .IsRequired();
 
                     b.Navigation("Bloodbank");
-
-                    b.Navigation("Bloodtypes");
 
                     b.Navigation("Hospitals");
                 });
@@ -484,12 +609,6 @@ namespace BusinessObject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessObject.Model.Bloodtypes", "Bloodtypes")
-                        .WithMany("Takebloods")
-                        .HasForeignKey("Bloodtypeid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BusinessObject.Model.Hospitals", "Hospitals")
                         .WithMany("Takebloods")
                         .HasForeignKey("Hospitalid")
@@ -497,8 +616,6 @@ namespace BusinessObject.Migrations
                         .IsRequired();
 
                     b.Navigation("Bloodbank");
-
-                    b.Navigation("Bloodtypes");
 
                     b.Navigation("Hospitals");
                 });
@@ -528,11 +645,11 @@ namespace BusinessObject.Migrations
 
             modelBuilder.Entity("BusinessObject.Model.Bloodtypes", b =>
                 {
+                    b.Navigation("QuantitySend");
+
+                    b.Navigation("QuantityTake");
+
                     b.Navigation("Registers");
-
-                    b.Navigation("SendBloods");
-
-                    b.Navigation("Takebloods");
                 });
 
             modelBuilder.Entity("BusinessObject.Model.Hospitals", b =>
@@ -544,9 +661,26 @@ namespace BusinessObject.Migrations
                     b.Navigation("Takebloods");
                 });
 
+            modelBuilder.Entity("BusinessObject.Model.NumberBlood", b =>
+                {
+                    b.Navigation("QuantitySends");
+
+                    b.Navigation("QuantityTake");
+                });
+
             modelBuilder.Entity("BusinessObject.Model.Requests", b =>
                 {
                     b.Navigation("Registers");
+                });
+
+            modelBuilder.Entity("BusinessObject.Model.SendBlood", b =>
+                {
+                    b.Navigation("QuantitySends");
+                });
+
+            modelBuilder.Entity("BusinessObject.Model.Takebloods", b =>
+                {
+                    b.Navigation("QuantityTake");
                 });
 
             modelBuilder.Entity("BusinessObject.Model.Users", b =>

@@ -36,6 +36,9 @@ namespace BusinessObject.Context
         public virtual DbSet<Activate> Activate { get; set; }
         public virtual DbSet<Images> Images { get; set; }
         public virtual DbSet<Bloodtypes> Bloodtypes { get; set; }
+        public virtual DbSet<NumberBlood> NumberBlood { get; set; }
+        public virtual DbSet<QuantitySend> QuantitySend { get; set; }
+        public virtual DbSet<QuantityTake> QuantityTake { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Registers>()
@@ -57,6 +60,11 @@ namespace BusinessObject.Context
                 .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<NumberBlood>().HasData(
+                new NumberBlood { numberbloodid = 1, quantity = 250},
+                new NumberBlood { numberbloodid = 2, quantity = 350},
+                new NumberBlood { numberbloodid = 3, quantity = 450}
+                );
         }
 
 

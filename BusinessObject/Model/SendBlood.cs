@@ -19,16 +19,10 @@ namespace BusinessObject.Model
 
         [ForeignKey("Bloodbank")]
         public int Bloodbankid { get; set; }
-
-        [ForeignKey("Bloodtypes")]
-        public int Bloodtypeid { get; set; }
-        public int Quantity { get; set; }
         public DateTime Datesend { get; set; }
         public int Status { get; set; }
         public virtual Hospitals Hospitals { get; set; }
         public virtual Bloodbank Bloodbank { get; set; }
-        public virtual Bloodtypes Bloodtypes { get; set; }
+        public virtual ICollection<QuantitySend> QuantitySends { get; set;} = new List<QuantitySend>();
     }
-
-
 }
