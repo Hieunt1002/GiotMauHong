@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Model;
 using DataAccess.DAO;
+using DataAccess.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,11 @@ namespace DataAccess.Repository
 
         public Users GetDefaultMember(string email, string password) => UserDAO.Instance.GetDefaultMember(email, password);
 
+        public ViewHistory gethistory(int id) => UserDAO.Instance.gethistory(id);
+
         public Users getUserid(string email) => UserDAO.Instance.getUserid(email);
 
         public Users Login(string email, string password) => UserDAO.Instance.Login(email, password);
+
     }
 }

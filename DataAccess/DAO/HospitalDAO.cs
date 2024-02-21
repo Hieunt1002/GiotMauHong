@@ -49,7 +49,12 @@ namespace DataAccess.DAO
                                  Ward=h.Ward,
                                  District=h.District,
                                  Address=h.Address,
-                                 Hospitals = r
+                                 Hospitals = new Hospitals
+                                 {
+                                     Hospitalid= r.Hospitalid,
+                                     NameHospital= r.NameHospital,
+                                     Users=r.Users,
+                                 }
                              }).ToList();
             }catch(Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using DataAccess.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace DataAccess.Repository
         Users GetDefaultMember(string email, string password);
         void ChangePass(Users users);
         Users checkpass(string email, string pass);
+        ViewHistory gethistory(int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using DataAccess.Model;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
 using Microsoft.AspNetCore.Http;

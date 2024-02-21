@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Security.Cryptography;
+using DataAccess.Model;
 
 namespace GiotMauHongAPI.Controller
 {
@@ -161,6 +162,19 @@ namespace GiotMauHongAPI.Controller
 
                     return Content("Password changed successfully");
                 }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Route("historyvolunteers")]
+        public ActionResult<ViewHistory> Historyvolunteers(int id)
+        {
+            try
+            {
+                return _repository.gethistory(id);
             }
             catch (Exception ex)
             {
