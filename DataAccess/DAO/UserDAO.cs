@@ -98,21 +98,75 @@ namespace DataAccess.DAO
             }
             return user;
         }
-        public Users getUserid (string email)
+        public async Task<string> forgotpass(string email, string content)
         {
+            string result = null;
+            try
+            {
+                if (IsValidEmail(email))
+                {
+                    var connectDB = new ConnectDB();
+                    var user = (from u in connectDB.Users
+                                where u.Email == email
+                                select new Users
+                                {
+                                    Email = u.Email
+                                }).FirstOrDefault();
 
+                    if (user != null)
+                    {
+                        await MailUtils.SendMailGoogleSmtp("nguyenanh0978638@gmail.com",
+                              user.Email,
+                              "Forgot Password",
+                              content,
+                              "nguyenanh0978638@gmail.com", "kxnutqxwydifngae");
+                        result = "Email sent successfully.";
+                    }
+                    else
+                    {
+                        result = "User not found for email " + email;
+                    }
+                }
+                else
+                {
+                    result = "Invalid email address " + email;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while processing the request", ex);
+            }
+            return result;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<Users> getUserid(int id)
+        {
             Users user = null;
             try
             {
-                var connectDB = new ConnectDB();
-                user = (from u in connectDB.Users
-                        where u.Email == email
-                        select new Users
-                        {
-                            UserId = u.UserId,
-                            Email = u.Email,
-                            Role = u.Role
-                        }).FirstOrDefault();
+                using (var connectDB = new ConnectDB())
+                {
+                    user = await (from u in connectDB.Users
+                                  where u.UserId == id
+                                  select new Users
+                                  {
+                                      UserId = u.UserId,
+                                      Email = u.Email,
+                                      Role = u.Role
+                                  }).FirstOrDefaultAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -120,6 +174,7 @@ namespace DataAccess.DAO
             }
             return user;
         }
+
         public Users getUsersid(int id)
         {
 
@@ -199,75 +254,67 @@ namespace DataAccess.DAO
                 if (u.Role == 1)
                 {
                     var connectDB = new ConnectDB();
-                    users = (from v in connectDB.Users
-                             join vs in connectDB.Volunteers on v.UserId equals vs.Volunteerid
-                             where v.UserId == id
-                             select new Users
-                             {
-                                 UserId = v.UserId,
-                                 Img = v.Img,
-                                 Email = v.Email,
-                                 PhoneNumber = v.PhoneNumber,
-                                 City = v.City,
-                                 Ward = v.Ward,
-                                 District = v.District,
-                                 Address = v.Address,
-                                 Volunteers = vs
-                             }).FirstOrDefault();
-                }else if(u.Role == 2)
+                    users = connectDB.Users.Where(u => u.UserId == id).Select(v => new Users
+                    {
+                        UserId = v.UserId,
+                        Img = v.Img,
+                        Email = v.Email,
+                        PhoneNumber = v.PhoneNumber,
+                        City = v.City,
+                        Ward = v.Ward,
+                        District = v.District,
+                        Address = v.Address,
+                        Volunteers = connectDB.Volunteers.FirstOrDefault(f => f.Volunteerid == v.UserId)
+                    }).FirstOrDefault();
+                }
+                else if (u.Role == 2)
                 {
                     var connectDB = new ConnectDB();
-                    users = (from v in connectDB.Users
-                             join vs in connectDB.Hospitals on v.UserId equals vs.Hospitalid
-                             where v.UserId == id
-                             select new Users
-                             {
-                                 UserId = v.UserId,
-                                 Img = v.Img,
-                                 Email = v.Email,
-                                 PhoneNumber = v.PhoneNumber,
-                                 City = v.City,
-                                 Ward = v.Ward,
-                                 District = v.District,
-                                 Address = v.Address,
-                                 Hospitals = vs
-                             }).FirstOrDefault();
+                    users = connectDB.Users.Where(u => u.UserId == id).Select(v => new Users
+                    {
+                        UserId = v.UserId,
+                        Img = v.Img,
+                        Email = v.Email,
+                        PhoneNumber = v.PhoneNumber,
+                        City = v.City,
+                        Ward = v.Ward,
+                        District = v.District,
+                        Address = v.Address,
+                        Hospitals = connectDB.Hospitals.FirstOrDefault(f => f.Hospitalid == v.UserId)
+                    }).FirstOrDefault();
                 }
                 else
                 {
                     var connectDB = new ConnectDB();
-                    users = (from v in connectDB.Users
-                             join vs in connectDB.Bloodbank on v.UserId equals vs.Bloodbankid
-                             where v.UserId == id
-                             select new Users
-                             {
-                                 UserId = v.UserId,
-                                 Img = v.Img,
-                                 Email = v.Email,
-                                 PhoneNumber = v.PhoneNumber,
-                                 City = v.City,
-                                 Ward = v.Ward,
-                                 District = v.District,
-                                 Address = v.Address,
-                                 Bloodbank = vs
-                             }).FirstOrDefault();
+                    users = connectDB.Users.Where(u => u.UserId == id).Select(v => new Users
+                    {
+                        UserId = v.UserId,
+                        Img = v.Img,
+                        Email = v.Email,
+                        PhoneNumber = v.PhoneNumber,
+                        City = v.City,
+                        Ward = v.Ward,
+                        District = v.District,
+                        Address = v.Address,
+                        Bloodbank = connectDB.Bloodbank.FirstOrDefault(f => f.Bloodbankid == v.UserId)
+                    }).FirstOrDefault();
                 }
-                
+
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
             return users;
-            
+
         }
         public void AddVolunteers(Volunteers volunteers)
         {
             try
             {
-               var connectDB = new ConnectDB();
-               connectDB.Volunteers.Add(volunteers);
-               connectDB.SaveChanges();
+                var connectDB = new ConnectDB();
+                connectDB.Volunteers.Add(volunteers);
+                connectDB.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -318,17 +365,25 @@ namespace DataAccess.DAO
         }
         public void ChangePass(Users users)
         {
-            var id = getUserid(users.Email);
+            var id = GetUserByEmail(users.Email);
             if (id != null)
             {
-                var connectDB = new ConnectDB();
-                connectDB.Entry<Users>(users).State = EntityState.Modified;
-                connectDB.SaveChanges();
+                using (var connectDB = new ConnectDB())
+                {
+                    var email = connectDB.Users.FirstOrDefault(e => e.Email == users.Email);
+                    if (email != null)
+                    {
+                        email.Password= users.Password;
+                        connectDB.Entry(email).State = EntityState.Modified;
+                        connectDB.SaveChanges();
+                    }
+                }
             }
             else
             {
                 throw new Exception("The User does not already exist.");
             }
         }
+
     }
 }

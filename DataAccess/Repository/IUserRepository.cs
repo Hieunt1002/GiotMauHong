@@ -18,5 +18,7 @@ namespace DataAccess.Repository
         void ChangePass(Users users);
         Users checkpass(string email, string pass);
         ViewHistory gethistory(int id);
+        Users getProfile(int id);
+        Task<string> forgotpass(string email, string content);
     }
 }
