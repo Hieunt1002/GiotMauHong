@@ -34,6 +34,7 @@ namespace GiotMauHongAPI
             services.AddScoped<IManagerRepository, ManagerRepository>();
             services.AddScoped<IHospitalRepository, HospitalRepository>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             var secretKey = Configuration["AppSettings:ScretKey"];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);

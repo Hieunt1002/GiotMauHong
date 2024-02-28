@@ -12,5 +12,10 @@ namespace DataAccess.Repository
     {
         IEnumerable<Requests> GetRequestsByHospital(int id);
         void AddRequest(Requests request);
+        void UpdateRequest(Requests request);
+        void DeleteRequest(int id);
+        Requests listvolunteerregister(int id);
+        IEnumerable<Bloodtypes> GetBloodtypes();
+        void UpdateRegister(Registers registers);
     }
 }

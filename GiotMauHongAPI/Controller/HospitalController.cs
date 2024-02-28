@@ -1,4 +1,5 @@
-﻿using BusinessObject.Model;
+﻿using Azure.Core;
+using BusinessObject.Model;
 using DataAccess.Model;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
@@ -54,6 +55,59 @@ namespace GiotMauHongAPI.Controller
                 };
                 repository.AddRequest(request);
                 return Ok(request);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPut]
+        [Route("updaterequest")]
+        public ActionResult updaterequest(Urequest uRequest)
+        {
+            try
+            {
+                var request = new Requests
+                {
+                    Requestid = uRequest.Requestid,
+                    RequestDate = uRequest.RequestDate,
+                    quantity = uRequest.quantity,
+                    Contact = uRequest.Contact,
+                    Starttime = uRequest.Starttime,
+                    Endtime = uRequest.Endtime,
+                    City = uRequest.City,
+                    Ward = uRequest.Ward,
+                    District = uRequest.District,
+                    Address = uRequest.Address
+                };
+                repository.UpdateRequest(request);
+                return Ok(request);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpDelete]
+        [Route("deleterequest")]
+        public ActionResult deleterequest(int id)
+        {
+            try
+            {
+                repository.DeleteRequest(id);
+                return NoContent();
+            }catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Route("listvolunteerregister")] 
+        public ActionResult<Requests> listvolunteerregister(int id)
+        {
+            try
+            {
+                return repository.listvolunteerregister(id);
             }
             catch
             {
