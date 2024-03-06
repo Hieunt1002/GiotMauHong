@@ -17,5 +17,22 @@ namespace DataAccess.Repository
         Requests listvolunteerregister(int id);
         IEnumerable<Bloodtypes> GetBloodtypes();
         void UpdateRegister(Registers registers);
+        Requests listhadvolunteerregister(int id);
+        void AddSendBlood(SendBlood sendBlood);
+        void AddTakeBlood(Takebloods takebloods);
+        void QuantityTakeBlood(QuantityTake quantityTake);
+        int takebookid(int hopitalid);
+        int sendbookid(int hopitalid);
+        IEnumerable<NumberBlood> listnumberBloods();
+        void QuantitySendBlood(QuantitySend quantitySend);
+        Requests GetRequestsByid(int id);
+        void updatesendblood(QuantitySend sendBlood);
+        SendBlood GetSendBloodbyid(int id);
+        IEnumerable<SendBlood> GetSendBlood();
+        void cancelsendblood(int id);
+        void canceltakeblood(int id);
+        IEnumerable<Takebloods> GetTakeBlood();
+        IEnumerable<Takebloods> GetTakeBloodbyid(int id);
+        void updatetakeblood(QuantityTake quantityTake);
     }
 }

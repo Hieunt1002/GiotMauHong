@@ -20,5 +20,6 @@ namespace DataAccess.Repository
         ViewHistory gethistory(int id);
         Users getProfile(int id);
         Task<string> forgotpass(string email, string content);
+        void addnotification(Notification notification);
     }
 }

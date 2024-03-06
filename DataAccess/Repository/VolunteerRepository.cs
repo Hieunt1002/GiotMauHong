@@ -11,7 +11,6 @@ namespace DataAccess.Repository
 {
     public class VolunteerRepository : IVolunteerRepository
     {
-        public void addnotification(Notification notification) => VolunteersDAO.Instance.addnotification(notification);
 
         public int Check(int id) => VolunteersDAO.Instance.Check(id);
 

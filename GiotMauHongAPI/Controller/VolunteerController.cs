@@ -58,7 +58,7 @@ namespace GiotMauHongAPI.Controller
                     Datepost = DateTime.Now.ToString(),
                     status = 0
                 };
-                repository.addnotification(n);
+                userRepository.addnotification(n);
                 return Ok(r);
             }
             catch (Exception ex)

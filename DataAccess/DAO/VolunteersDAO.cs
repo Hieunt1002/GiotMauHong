@@ -111,18 +111,6 @@ namespace DataAccess.DAO
                 return false;
             }
         }
-        public void addnotification(Notification notification)
-        {
-            try
-            {
-                var connectDB = new ConnectDB();
-                connectDB.Notification.Add(notification);
-                connectDB.SaveChanges();
-            }catch(Exception ex)
-            {
-                throw new Exception("Error occurred while registering request", ex);
-            }
-        }
         public int Check(int id)
         {
             int status = 0;

@@ -3,6 +3,6 @@
     public class AddActive
     {
         public string NameActivate { get; set; }
-        public List<AImg> aImgs { get; set; }
+        public List<AImg> aImgs { get; set; } = new List<AImg>();
     }
 }

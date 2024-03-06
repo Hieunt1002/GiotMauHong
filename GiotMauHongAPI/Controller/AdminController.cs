@@ -94,7 +94,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("addactive")]
-        public ActionResult AddActive([FromBody] AddActive nameactive)
+        public ActionResult AddActive(AddActive nameactive)
         {
             try
             {
@@ -105,9 +105,10 @@ namespace GiotMauHongAPI.Controller
                 };
                 repository.AddActive(a);
                 int i = repository.GetActive();
-                if(i != 0)
+                if (i != 0)
                 {
-                    foreach(var img in nameactive.aImgs){
+                    foreach (var img in nameactive.aImgs)
+                    {
                         var m = new Images
                         {
                             Activateid = i,
@@ -120,6 +121,48 @@ namespace GiotMauHongAPI.Controller
             }
             catch
             {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPut]
+        [Route("updateactive")]
+        public ActionResult UpdateActive(UpdateActive nameactive)
+        {
+            try
+            {
+                var a = new Activate
+                {
+                    Activateid = nameactive.ActiveId,
+                    NameActivate = nameactive.NameActivate
+                };
+                repository.UpdateActive(a);
+                foreach (var img in nameactive.uImgs)
+                {
+                    var m = new Images
+                    {
+                        ImgId = img.ImgId,
+                        Img = img.Img,
+                    };
+                    repository.UpdateImgforActive(m);
+                }
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpDelete]
+        [Route("deleteactive")]
+        public ActionResult deleteactive(int id)
+        {
+            try
+            {
+                repository.DeleteActive(id);
+                return NoContent();
+            }
+            catch 
+            { 
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

@@ -13,7 +13,6 @@ namespace DataAccess.Repository
         IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, string address);
         Task regesterRequest(Registers registers);
         int Check(int id);
-        void addnotification(Notification notification);
         IEnumerable<Notification> GetNotifications(int id);
         void updatestatusnotification(Notification notification);
         int countnotification(int id);

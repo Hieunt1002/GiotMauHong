@@ -52,7 +52,13 @@ namespace DataAccess.DAO
             try
             {
                 var connectDB = new ConnectDB();
-                activates = connectDB.Activate.FirstOrDefault(a => a.Activateid == id);
+                activates = connectDB.Activate.Select(a => new Activate
+                {
+                    Activateid = a.Activateid,
+                    NameActivate = a.NameActivate,
+                    Datepost = a.Datepost,
+                    Images = connectDB.Images.Where(i => i.Activateid == a.Activateid).ToList(),
+                }).FirstOrDefault();
             }
             catch (Exception ex) { throw new Exception(ex.Message); }
             return activates;
@@ -88,7 +94,7 @@ namespace DataAccess.DAO
             try
             {
                 var connectDB = new ConnectDB();
-                var r = connectDB.Images.FirstOrDefault(n => n.Activateid == images.Activateid);
+                var r = connectDB.Images.FirstOrDefault(n => n.ImgId == images.ImgId);
                 if (r != null)
                 {
                     r.Img = images.Img;
