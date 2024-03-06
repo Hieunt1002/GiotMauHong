@@ -270,7 +270,6 @@ namespace GiotMauHongAPI.Controller
                     };
                     repository.updatesendblood(q);
                 }
-                userRepository.addnotification(n);
                 return Content("Successfully");
             }
             catch
