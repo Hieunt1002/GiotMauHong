@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using DataAccess.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace DataAccess.Repository
         void AddUser(Users user);
         IEnumerable<Users> GetListHospital();
         Users getUserid(string email);
+        IEnumerable<InforHospitalDTO> GetInforHospitalDTOs(int id);
+        IEnumerable<InforHospitalDTO> GetInforHospitalTakeBlood(int id);
     }
 }

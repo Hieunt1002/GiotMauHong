@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using DataAccess.DTO;
 using DataAccess.Model;
 using System;
 using System.Collections.Generic;
@@ -34,5 +35,7 @@ namespace DataAccess.Repository
         IEnumerable<Takebloods> GetTakeBlood();
         IEnumerable<Takebloods> GetTakeBloodbyid(int id);
         void updatetakeblood(QuantityTake quantityTake);
+        IEnumerable<NumberBloodDTO> listnumberblood();
+        IEnumerable<SendBlood> GetSendBloodbyhospitalid(int id);
     }
 }

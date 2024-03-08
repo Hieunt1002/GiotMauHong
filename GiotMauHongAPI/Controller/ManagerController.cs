@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Model;
+using DataAccess.DTO;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
 using Microsoft.AspNetCore.Http;
@@ -75,6 +76,38 @@ namespace GiotMauHongAPI.Controller
                     return Content("Not found");
                 return Ok(user);
             }catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Route("getInforHospitalsendbood")]
+        public ActionResult<IEnumerable<InforHospitalDTO>> GetInforHospital(int id)
+        {
+            try
+            {
+                var user = repository.GetInforHospitalDTOs(id);
+                if (user == null)
+                    return Content("Not found");
+                return Ok(user);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Route("getInforHospitaltakeblood")]
+        public ActionResult<IEnumerable<InforHospitalDTO>> getInforHospitaltakeblood(int id)
+        {
+            try
+            {
+                var user = repository.GetInforHospitalTakeBlood(id);
+                if (user == null)
+                    return Content("Not found");
+                return Ok(user);
+            }
+            catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }

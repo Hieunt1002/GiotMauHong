@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Model;
 using DataAccess.DAO;
+using DataAccess.DTO;
 using DataAccess.Model;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace DataAccess.Repository
 
         public IEnumerable<SendBlood> GetSendBlood() => HospitalDAO.Instance.GetSendBlood();
 
+        public IEnumerable<SendBlood> GetSendBloodbyhospitalid(int id) => HospitalDAO.Instance.GetSendBloodbyhospitalid(id);
+
         public SendBlood GetSendBloodbyid(int id) => HospitalDAO.Instance.GetSendBloodbyid(id);
 
         public IEnumerable<Takebloods> GetTakeBlood() => HospitalDAO.Instance.GetTakeBlood();
@@ -38,6 +41,8 @@ namespace DataAccess.Repository
         public IEnumerable<Takebloods> GetTakeBloodbyid(int id) => HospitalDAO.Instance.GetTakeBloodbyid(id);
 
         public Requests listhadvolunteerregister(int id) => HospitalDAO.Instance.listvolunteerregister(id);
+
+        public IEnumerable<NumberBloodDTO> listnumberblood() => HospitalDAO.Instance.listnumberblood();
 
         public IEnumerable<NumberBlood> listnumberBloods() => HospitalDAO.Instance.listnumberBloods();
 

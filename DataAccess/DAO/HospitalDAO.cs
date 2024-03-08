@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using BusinessObject.Context;
 using BusinessObject.Model;
+using DataAccess.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
@@ -313,7 +314,7 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 id = (from c in connectDB.Takebloods
-                      where c.Hospitalid == hopitalid && c.Datetake == DateTime.Now && c.Status == 0
+                      where c.Hospitalid == hopitalid && c.Status == 0
                       select c.Takebloodid).FirstOrDefault();
             }
             catch (Exception ex)
@@ -329,7 +330,7 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 id = (from c in connectDB.SendBlood
-                      where c.Hospitalid == hopitalid && c.Datesend == DateTime.Now && c.Status == 0
+                      where c.Hospitalid == hopitalid && c.Status == 0
                       select c.SendBloodid).FirstOrDefault();
             }catch(Exception ex)
             {
@@ -504,6 +505,49 @@ namespace DataAccess.DAO
             }
             return sendBloods;
         }
+        public IEnumerable<SendBlood> GetSendBloodbyhospitalid(int id)
+        {
+            List<SendBlood> sendBloods;
+            try
+            {
+                var connectDB = new ConnectDB();
+                sendBloods = connectDB.SendBlood.Where(a => a.Hospitalid == id).Select(s => new SendBlood
+                {
+                    SendBloodid = s.SendBloodid,
+                    Hospitalid = s.Hospitalid,
+                    Bloodbankid = s.Bloodbankid,
+                    Datesend = s.Datesend,
+                    Status = s.Status,
+                    Hospitals = connectDB.Hospitals.Where(h => h.Hospitalid == s.Hospitalid).Select(h => new Hospitals
+                    {
+                        Hospitalid = h.Hospitalid,
+                        NameHospital = h.NameHospital,
+                        Users = connectDB.Users.Where(u => u.UserId == h.Hospitalid).FirstOrDefault()
+                    }).FirstOrDefault(),
+                    Bloodbank = connectDB.Bloodbank.Where(h => h.Bloodbankid == s.Bloodbankid).Select(h => new Bloodbank
+                    {
+                        Bloodbankid = h.Bloodbankid,
+                        NameBloodbank = h.NameBloodbank,
+                        Users = connectDB.Users.Where(u => u.UserId == h.Bloodbankid).FirstOrDefault()
+                    }).FirstOrDefault(),
+                    QuantitySends = connectDB.QuantitySend.Where(q => q.SendBloodid == s.SendBloodid).Select(a => new QuantitySend
+                    {
+                        quantitysendid = a.quantitysendid,
+                        numberbloodid = a.numberbloodid,
+                        SendBloodid = a.SendBloodid,
+                        Bloodtypeid = a.Bloodtypeid,
+                        quantity = a.quantity,
+                        NumberBlood = connectDB.NumberBlood.Where(n => n.numberbloodid == a.numberbloodid).FirstOrDefault(),
+                        Bloodtypes = connectDB.Bloodtypes.Where(b => b.Bloodtypeid == a.Bloodtypeid).FirstOrDefault()
+                    }).ToList()
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return sendBloods;
+        }
         public SendBlood GetSendBloodbyid(int id)
         {
             SendBlood sendBloods;
@@ -633,5 +677,35 @@ namespace DataAccess.DAO
             }
             return sendBloods;
         }
+        public IEnumerable<NumberBloodDTO> listnumberblood()
+        {
+            List<NumberBloodDTO> numberBloods;
+            try
+            {
+                var connectDB = new ConnectDB();
+                numberBloods = (from b in connectDB.Bloodtypes
+                                where b.Bloodtypeid != 1
+                                select new NumberBloodDTO
+                                {
+                                    Bloodtypeid = b.Bloodtypeid,
+                                    NameBlood = b.NameBlood,
+                                    totalBloodDTOs = (from nb in connectDB.NumberBlood
+                                                      join qs in connectDB.QuantitySend on nb.numberbloodid equals qs.numberbloodid
+                                                      where qs.Bloodtypeid == b.Bloodtypeid
+                                                      select new TotalBloodDTO
+                                                      {
+                                                          numberbloodid = nb.numberbloodid,
+                                                          quantity = nb.quantity,
+                                                          total = connectDB.QuantitySend.Where(s => s.Bloodtypeid == b.Bloodtypeid && s.numberbloodid == nb.numberbloodid).Sum(t => t.quantity) - 
+                                                          connectDB.QuantityTake.Where(s => s.Bloodtypeid == b.Bloodtypeid && s.numberbloodid == nb.numberbloodid).Sum(t => t.quantity)
+                                                      }).ToList()
+                                }).ToList();
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return numberBloods;
+        }
+
     }
 }

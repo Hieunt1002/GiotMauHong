@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Model;
 using DataAccess.DAO;
+using DataAccess.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace DataAccess.Repository
         public void AddHospital(Hospitals hospitals) => ManagerDAO.Instance.AddHospital(hospitals);
 
         public void AddUser(Users user) => ManagerDAO.Instance.AddUser(user);
+
+        public IEnumerable<InforHospitalDTO> GetInforHospitalDTOs(int id) => ManagerDAO.Instance.GetInforHospitalDTOs(id);
+
+        public IEnumerable<InforHospitalDTO> GetInforHospitalTakeBlood(int id) => ManagerDAO.Instance.GetInforHospitalTakeBlood(id);
 
         public IEnumerable<Users> GetListHospital() => ManagerDAO.Instance.GetListHospital();
 

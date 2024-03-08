@@ -398,5 +398,31 @@ namespace GiotMauHongAPI.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        [HttpGet]
+        [Route("displaysremainingblood")]
+        public ActionResult<IEnumerable<NumberBlood>> displaysremainingblood()
+        {
+            try
+            {
+                return Ok(repository.listnumberblood());
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Route("getSendBloodbyhospitalid")]
+        public ActionResult<IEnumerable<NumberBlood>> GetSendBloodbyhospitalid(int id)
+        {
+            try
+            {
+                return Ok(repository.GetSendBloodbyhospitalid(id));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
