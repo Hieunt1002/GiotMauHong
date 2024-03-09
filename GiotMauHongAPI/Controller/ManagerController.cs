@@ -112,5 +112,43 @@ namespace GiotMauHongAPI.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        [HttpPut]
+        [Route("updatestatussendblood")]
+        public ActionResult updatestatussendblood(UpdateStatusDTO updateStatus)
+        {
+            try
+            {
+                var send = new SendBlood
+                {
+                    SendBloodid = updateStatus.Id,
+                    Status = updateStatus.Status
+                };
+                repository.acceptSend(send);
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPut]
+        [Route("updatestatustakeblood")]
+        public ActionResult updatestatustakeblood(UpdateStatusDTO updateStatus)
+        {
+            try
+            {
+                var send = new Takebloods
+                {
+                    Takebloodid = updateStatus.Id,
+                    Status = updateStatus.Status
+                };
+                repository.accepttake(send);
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }
