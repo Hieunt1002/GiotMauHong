@@ -23,5 +23,6 @@ namespace DataAccess.Model
         public string Address { get; set; }
         public virtual Hospitals Hospitals { get; set; }
         public double total { get; set; }
+        public int status { get; set; }
     }
 }

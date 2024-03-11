@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(ConnectDB))]
-    [Migration("20240220161220_Indit")]
+    [Migration("20240311141949_Indit")]
     partial class Indit
     {
         /// <inheritdoc />
@@ -74,6 +74,28 @@ namespace BusinessObject.Migrations
                     b.HasKey("Bloodtypeid");
 
                     b.ToTable("Bloodtypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Bloodtypeid = 1,
+                            NameBlood = "A"
+                        },
+                        new
+                        {
+                            Bloodtypeid = 2,
+                            NameBlood = "B"
+                        },
+                        new
+                        {
+                            Bloodtypeid = 3,
+                            NameBlood = "AB"
+                        },
+                        new
+                        {
+                            Bloodtypeid = 4,
+                            NameBlood = "O"
+                        });
                 });
 
             modelBuilder.Entity("BusinessObject.Model.Hospitals", b =>
@@ -81,11 +103,16 @@ namespace BusinessObject.Migrations
                     b.Property<int>("Hospitalid")
                         .HasColumnType("int");
 
+                    b.Property<int>("Bloodbankid")
+                        .HasColumnType("int");
+
                     b.Property<string>("NameHospital")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Hospitalid");
+
+                    b.HasIndex("Bloodbankid");
 
                     b.ToTable("Hospitals");
                 });
@@ -312,6 +339,9 @@ namespace BusinessObject.Migrations
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
                     b.HasKey("Requestid");
 
                     b.HasIndex("Hospitalid");
@@ -462,11 +492,19 @@ namespace BusinessObject.Migrations
 
             modelBuilder.Entity("BusinessObject.Model.Hospitals", b =>
                 {
+                    b.HasOne("BusinessObject.Model.Bloodbank", "Bloodbank")
+                        .WithMany("Hospitals")
+                        .HasForeignKey("Bloodbankid")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("BusinessObject.Model.Users", "Users")
                         .WithOne("Hospitals")
                         .HasForeignKey("BusinessObject.Model.Hospitals", "Hospitalid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Bloodbank");
 
                     b.Navigation("Users");
                 });
@@ -641,6 +679,8 @@ namespace BusinessObject.Migrations
 
             modelBuilder.Entity("BusinessObject.Model.Bloodbank", b =>
                 {
+                    b.Navigation("Hospitals");
+
                     b.Navigation("SendBloods");
 
                     b.Navigation("Takebloods");

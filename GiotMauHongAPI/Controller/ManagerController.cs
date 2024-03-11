@@ -55,7 +55,8 @@ namespace GiotMauHongAPI.Controller
                 var volun = new Hospitals
                 {
                     Hospitalid = users.UserId,
-                    NameHospital = user.NameHospital
+                    NameHospital = user.NameHospital,
+                    Bloodbankid = user.bloodbankid
                 };
                 repository.AddHospital(volun);
                 return NoContent();

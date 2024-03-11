@@ -57,7 +57,8 @@ namespace DataAccess.DAO
                                      Hospitalid = r.Hospitalid,
                                      NameHospital = r.NameHospital,
                                      Users = r.Users,
-                                 }
+                                 },
+                                 status = h.status
                              }).ToList();
             }
             catch (Exception ex)
@@ -93,7 +94,8 @@ namespace DataAccess.DAO
                                      Hospitalid = r.Hospitalid,
                                      NameHospital = r.NameHospital,
                                      Users = r.Users,
-                                 }
+                                 },
+                                 status = h.status
                              }).FirstOrDefault();
             }
             catch (Exception ex)
@@ -191,7 +193,8 @@ namespace DataAccess.DAO
                             Users = connectDB.Users.FirstOrDefault(m=>m.UserId == p.Volunteerid)
                         }).FirstOrDefault(),
                         Bloodtypes = connectDB.Bloodtypes.FirstOrDefault(z => z.Bloodtypeid == b.Bloodtypeid)
-                    }).ToList()
+                    }).ToList(),
+                    status = c.status
                 }).FirstOrDefault();
             }catch(Exception ex) { throw new Exception(ex.Message); }
             return request;
@@ -232,7 +235,8 @@ namespace DataAccess.DAO
                                        Users = connectDB.Users.FirstOrDefault(m => m.UserId == p.Volunteerid)
                                    }).FirstOrDefault(),
                                    Bloodtypes = connectDB.Bloodtypes.FirstOrDefault(z => z.Bloodtypeid == b.Bloodtypeid)
-                               }).ToList()
+                               }).ToList(),
+                               status = c.status
                            }).FirstOrDefault();
             }
             catch (Exception ex) { throw new Exception(ex.Message); }

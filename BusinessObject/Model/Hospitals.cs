@@ -13,6 +13,9 @@ namespace BusinessObject.Model
         [Key, ForeignKey("Users")]
         public int Hospitalid { get; set; }
         public string NameHospital { get; set; }
+        [ForeignKey ("Bloodbank")]
+        public int Bloodbankid { get; set; }
+        public virtual Bloodbank Bloodbank { get; set; }
         public virtual Users Users { get; set; }
         public virtual ICollection<Requests> Requests { get; set; } = new List<Requests>();
         public virtual ICollection<SendBlood> SendBloods { get; set; } = new List<SendBlood>();

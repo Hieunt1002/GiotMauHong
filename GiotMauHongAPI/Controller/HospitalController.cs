@@ -52,7 +52,8 @@ namespace GiotMauHongAPI.Controller
                     City = aRequest.City,
                     Ward = aRequest.Ward,
                     District = aRequest.District,
-                    Address = aRequest.Address
+                    Address = aRequest.Address,
+                    status = 0
                 };
                 repository.AddRequest(request);
                 var n = new Notification

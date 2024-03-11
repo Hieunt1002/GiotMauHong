@@ -58,12 +58,23 @@ namespace BusinessObject.Context
                 .WithMany(h => h.Takebloods)
                 .HasForeignKey(tb => tb.Hospitalid) 
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Hospitals>()
+                .HasOne(tb => tb.Bloodbank)
+                .WithMany(h => h.Hospitals)
+                .HasForeignKey(tb => tb.Bloodbankid)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<NumberBlood>().HasData(
                 new NumberBlood { numberbloodid = 1, quantity = 250},
                 new NumberBlood { numberbloodid = 2, quantity = 350},
                 new NumberBlood { numberbloodid = 3, quantity = 450}
+                );
+            modelBuilder.Entity<Bloodtypes>().HasData(
+                new Bloodtypes { Bloodtypeid = 1, NameBlood = "A" },
+                new Bloodtypes { Bloodtypeid = 2, NameBlood = "B" },
+                new Bloodtypes { Bloodtypeid = 3, NameBlood = "AB" },
+                new Bloodtypes { Bloodtypeid = 4, NameBlood = "O" }
                 );
         }
 

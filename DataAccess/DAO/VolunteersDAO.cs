@@ -54,7 +54,8 @@ namespace DataAccess.DAO
                                 District = r.District,
                                 Address = r.Address,
                                 Hospitals = h,
-                                total = ((double)connectDB.Registers.Count(c => c.Requestid == r.Requestid) / r.quantity) * 100
+                                total = ((double)connectDB.Registers.Count(c => c.Requestid == r.Requestid) / r.quantity) * 100,
+                                status = r.RequestDate < DateTime.Today ? 0 : 1
                             }).ToList();
             }
             catch (Exception ex)

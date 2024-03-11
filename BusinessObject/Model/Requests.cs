@@ -24,6 +24,7 @@ namespace BusinessObject.Model
         public string Ward { get; set; }
         public string District { get; set; }
         public string Address { get; set; }
+        public int status { get; set; }
         public virtual Hospitals Hospitals { get; set; }
         public virtual ICollection<Registers> Registers { get; set; } = new List<Registers>();
     }

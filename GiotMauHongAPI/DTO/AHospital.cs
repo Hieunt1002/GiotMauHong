@@ -4,6 +4,7 @@ namespace GiotMauHongAPI.DTO
 {
     public class AHospital
     {
+        public int bloodbankid { get; set; }
         public string Img { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

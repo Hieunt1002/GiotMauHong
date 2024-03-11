@@ -16,6 +16,7 @@ namespace BusinessObject.Model
         public virtual Users Users { get; set; }
         public virtual ICollection<SendBlood> SendBloods { get; set; } = new List<SendBlood>();
         public virtual ICollection<Takebloods> Takebloods { get; set; } = new List<Takebloods>();
+        public virtual ICollection<Hospitals> Hospitals { get; set; } = new List<Hospitals>();
 
     }
 }

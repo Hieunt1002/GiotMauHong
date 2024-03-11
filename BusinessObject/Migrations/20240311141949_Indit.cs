@@ -113,24 +113,6 @@ namespace BusinessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hospitals",
-                columns: table => new
-                {
-                    Hospitalid = table.Column<int>(type: "int", nullable: false),
-                    NameHospital = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Hospitals", x => x.Hospitalid);
-                    table.ForeignKey(
-                        name: "FK_Hospitals_Users_Hospitalid",
-                        column: x => x.Hospitalid,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Notification",
                 columns: table => new
                 {
@@ -174,6 +156,30 @@ namespace BusinessObject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Hospitals",
+                columns: table => new
+                {
+                    Hospitalid = table.Column<int>(type: "int", nullable: false),
+                    NameHospital = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bloodbankid = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hospitals", x => x.Hospitalid);
+                    table.ForeignKey(
+                        name: "FK_Hospitals_Bloodbank_Bloodbankid",
+                        column: x => x.Bloodbankid,
+                        principalTable: "Bloodbank",
+                        principalColumn: "Bloodbankid");
+                    table.ForeignKey(
+                        name: "FK_Hospitals_Users_Hospitalid",
+                        column: x => x.Hospitalid,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Requests",
                 columns: table => new
                 {
@@ -188,7 +194,8 @@ namespace BusinessObject.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Ward = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -357,6 +364,17 @@ namespace BusinessObject.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Bloodtypes",
+                columns: new[] { "Bloodtypeid", "NameBlood" },
+                values: new object[,]
+                {
+                    { 1, "A" },
+                    { 2, "B" },
+                    { 3, "AB" },
+                    { 4, "O" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "NumberBlood",
                 columns: new[] { "numberbloodid", "quantity" },
                 values: new object[,]
@@ -365,6 +383,11 @@ namespace BusinessObject.Migrations
                     { 2, 350 },
                     { 3, 450 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hospitals_Bloodbankid",
+                table: "Hospitals",
+                column: "Bloodbankid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_Activateid",
@@ -487,10 +510,10 @@ namespace BusinessObject.Migrations
                 name: "Volunteers");
 
             migrationBuilder.DropTable(
-                name: "Bloodbank");
+                name: "Hospitals");
 
             migrationBuilder.DropTable(
-                name: "Hospitals");
+                name: "Bloodbank");
 
             migrationBuilder.DropTable(
                 name: "Users");
