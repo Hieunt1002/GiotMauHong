@@ -25,7 +25,7 @@ namespace DataAccess.Repository
 
         public ViewHistory gethistory(int id) => UserDAO.Instance.gethistory(id);
 
-        public Users getProfile(int id) => UserDAO.Instance.getProfile(id);
+        public Users getProfile(int id) => UserDAO.Instance.GetProfile(id);
 
         public Users getUserid(string email) => UserDAO.Instance.GetUserByEmail(email);
 

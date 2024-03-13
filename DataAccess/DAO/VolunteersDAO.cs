@@ -39,7 +39,7 @@ namespace DataAccess.DAO
                             join h in connectDB.Hospitals on r.Hospitalid equals h.Hospitalid
                             join d in connectDB.Registers on r.Requestid equals d.Requestid into registerGroup
                             from d in registerGroup.DefaultIfEmpty()
-                            where r.RequestDate >= startdate && r.RequestDate <= enddate && r.City == address
+                            where r.RequestDate >= startdate && r.RequestDate <= enddate && r.City == address && r.status != 0
                             select new ViewRequest
                             {
                                 Requestid = r.Requestid,
