@@ -260,50 +260,67 @@ namespace DataAccess.DAO
         }
         public Users GetProfile(int id)
         {
+            Users users = null;
             try
             {
-                using (var connectDB = new ConnectDB())
+                var u = getUsersid(id);
+                if (u.Role == 1)
                 {
-                    var user = connectDB.Users.FirstOrDefault(u => u.UserId == id);
-                    if (user != null)
+                    var connectDB = new ConnectDB();
+                    users = connectDB.Users.Where(u => u.UserId == id).Select(v => new Users
                     {
-                        Users profile = new Users
-                        {
-                            UserId = user.UserId,
-                            Img = user.Img,
-                            Email = user.Email,
-                            PhoneNumber = user.PhoneNumber,
-                            City = user.City,
-                            Ward = user.Ward,
-                            District = user.District,
-                            Address = user.Address
-                        };
-
-                        if (user.Role == 1)
-                        {
-                            profile.Volunteers = connectDB.Volunteers.FirstOrDefault(v => v.Volunteerid == id);
-                        }
-                        else if (user.Role == 2)
-                        {
-                            profile.Hospitals = connectDB.Hospitals.FirstOrDefault(h => h.Hospitalid == id);
-                        }
-                        else
-                        {
-                            profile.Bloodbank = connectDB.Bloodbank.FirstOrDefault(b => b.Bloodbankid == id);
-                        }
-
-                        return profile;
-                    }
-                    else
+                        UserId = v.UserId,
+                        Img = v.Img,
+                        Email = v.Email,
+                        PhoneNumber = v.PhoneNumber,
+                        City = v.City,
+                        Ward = v.Ward,
+                        District = v.District,
+                        Address = v.Address,
+                        Role = v.Role,
+                        Volunteers = connectDB.Volunteers.FirstOrDefault(f => f.Volunteerid == v.UserId)
+                    }).FirstOrDefault();
+                }
+                else if (u.Role == 2)
+                {
+                    var connectDB = new ConnectDB();
+                    users = connectDB.Users.Where(u => u.UserId == id).Select(v => new Users
                     {
-                        return null;
-                    }
+                        UserId = v.UserId,
+                        Img = v.Img,
+                        Email = v.Email,
+                        PhoneNumber = v.PhoneNumber,
+                        City = v.City,
+                        Ward = v.Ward,
+                        District = v.District,
+                        Address = v.Address,
+                        Role = v.Role,
+                        Hospitals = connectDB.Hospitals.FirstOrDefault(f => f.Hospitalid == v.UserId)
+                    }).FirstOrDefault();
+                }
+                else
+                {
+                    var connectDB = new ConnectDB();
+                    users = connectDB.Users.Where(u => u.UserId == id).Select(v => new Users
+                    {
+                        UserId = v.UserId,
+                        Img = v.Img,
+                        Email = v.Email,
+                        PhoneNumber = v.PhoneNumber,
+                        City = v.City,
+                        Ward = v.Ward,
+                        District = v.District,
+                        Address = v.Address,
+                        Role = v.Role,
+                        Bloodbank = connectDB.Bloodbank.FirstOrDefault(f => f.Bloodbankid == v.UserId)
+                    }).FirstOrDefault();
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("Error fetching user profile.", ex);
             }
+            return users;
         }
 
         public void AddVolunteers(Volunteers volunteers)
