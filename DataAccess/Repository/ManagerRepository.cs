@@ -25,7 +25,9 @@ namespace DataAccess.Repository
 
         public IEnumerable<InforHospitalDTO> GetInforHospitalTakeBlood(int id) => ManagerDAO.Instance.GetInforHospitalTakeBlood(id);
 
-        public IEnumerable<Users> GetListHospital() => ManagerDAO.Instance.GetListHospital();
+        public IEnumerable<Users> GetListHospital(int id) => ManagerDAO.Instance.GetListHospital(id);
+
+        public IEnumerable<Requests> GetRequestsByHospital(int id) => ManagerDAO.Instance.GetRequestsByHospital(id);
 
         public Users getUserid(string email) => ManagerDAO.Instance.getUserid(email);
     }

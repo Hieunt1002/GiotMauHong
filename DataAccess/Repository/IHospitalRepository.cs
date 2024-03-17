@@ -29,13 +29,13 @@ namespace DataAccess.Repository
         Requests GetRequestsByid(int id);
         void updatesendblood(QuantitySend sendBlood);
         SendBlood GetSendBloodbyid(int id);
-        IEnumerable<SendBlood> GetSendBlood();
+        IEnumerable<SendBlood> GetSendBlood(int id);
         void cancelsendblood(int id);
         void canceltakeblood(int id);
-        IEnumerable<Takebloods> GetTakeBlood();
+        IEnumerable<Takebloods> GetTakeBlood(int id);
         IEnumerable<Takebloods> GetTakeBloodbyid(int id);
         void updatetakeblood(QuantityTake quantityTake);
-        IEnumerable<NumberBloodDTO> listnumberblood();
+        IEnumerable<NumberBloodDTO> listnumberblood(int id);
         IEnumerable<SendBlood> GetSendBloodbyhospitalid(int id);
     }
 }

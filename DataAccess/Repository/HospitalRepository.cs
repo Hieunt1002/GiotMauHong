@@ -30,19 +30,19 @@ namespace DataAccess.Repository
 
         public Requests GetRequestsByid(int id) => HospitalDAO.Instance.GetRequestsByid(id);
 
-        public IEnumerable<SendBlood> GetSendBlood() => HospitalDAO.Instance.GetSendBlood();
+        public IEnumerable<SendBlood> GetSendBlood(int id) => HospitalDAO.Instance.GetSendBlood(id);
 
         public IEnumerable<SendBlood> GetSendBloodbyhospitalid(int id) => HospitalDAO.Instance.GetSendBloodbyhospitalid(id);
 
         public SendBlood GetSendBloodbyid(int id) => HospitalDAO.Instance.GetSendBloodbyid(id);
 
-        public IEnumerable<Takebloods> GetTakeBlood() => HospitalDAO.Instance.GetTakeBlood();
+        public IEnumerable<Takebloods> GetTakeBlood(int id) => HospitalDAO.Instance.GetTakeBlood(id);
 
         public IEnumerable<Takebloods> GetTakeBloodbyid(int id) => HospitalDAO.Instance.GetTakeBloodbyid(id);
 
         public Requests listhadvolunteerregister(int id) => HospitalDAO.Instance.listvolunteerregister(id);
 
-        public IEnumerable<NumberBloodDTO> listnumberblood() => HospitalDAO.Instance.listnumberblood();
+        public IEnumerable<NumberBloodDTO> listnumberblood(int id) => HospitalDAO.Instance.listnumberblood(id);
 
         public IEnumerable<NumberBlood> listnumberBloods() => HospitalDAO.Instance.listnumberBloods();
 

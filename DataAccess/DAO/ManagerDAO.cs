@@ -84,7 +84,7 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
-        public IEnumerable<Users> GetListHospital()
+        public IEnumerable<Users> GetListHospital(int id)
         {
             List<Users> hospitals;
             try
@@ -92,7 +92,7 @@ namespace DataAccess.DAO
                 var connectDB = new ConnectDB();
                 hospitals = (from u in connectDB.Users
                              join h in connectDB.Hospitals on u.UserId equals h.Hospitalid
-                             where u.Role == 2
+                             where u.Role == 2 && h.Bloodbankid == id
                              select new Users
                              {
                                  UserId = u.UserId,
@@ -133,6 +133,43 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
             return user;
+        }
+        public IEnumerable<Requests> GetRequestsByHospital(int id)
+        {
+            List<Requests> hospitals;
+            try
+            {
+                var connectDB = new ConnectDB();
+                hospitals = (from h in connectDB.Requests
+                             join r in connectDB.Hospitals on h.Hospitalid equals r.Hospitalid
+                             where r.Bloodbankid == id
+                             select new Requests
+                             {
+                                 Requestid = h.Requestid,
+                                 Hospitalid = h.Hospitalid,
+                                 RequestDate = h.RequestDate,
+                                 quantity = h.quantity,
+                                 Contact = h.Contact,
+                                 Starttime = h.Starttime,
+                                 Endtime = h.Endtime,
+                                 City = h.City,
+                                 Ward = h.Ward,
+                                 District = h.District,
+                                 Address = h.Address,
+                                 Hospitals = new Hospitals
+                                 {
+                                     Hospitalid = r.Hospitalid,
+                                     NameHospital = r.NameHospital,
+                                     Users = r.Users,
+                                 },
+                                 status = h.status
+                             }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return hospitals;
         }
         public IEnumerable<InforHospitalDTO> GetInforHospitalDTOs(int id)
         {

@@ -147,7 +147,7 @@ namespace DataAccess.DAO
             try
             {
                 var connectDB = new ConnectDB();
-                var d = connectDB.Requests.FirstOrDefault(r => r.Requestid == id);
+                var d = connectDB.Requests.FirstOrDefault(r => r.Requestid == id && r.RequestDate > DateTime.Now);
                 if (d != null)
                 {
                     connectDB.Requests.Remove(d);
@@ -467,13 +467,13 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
-        public IEnumerable<SendBlood> GetSendBlood()
+        public IEnumerable<SendBlood> GetSendBlood(int id)
         {
             List<SendBlood> sendBloods;
             try
             {
                 var connectDB = new ConnectDB();
-                sendBloods = connectDB.SendBlood.Select(s => new SendBlood
+                sendBloods = connectDB.SendBlood.Where(i => i.Hospitalid == id).Select(s => new SendBlood
                 {
                     SendBloodid = s.SendBloodid,
                     Hospitalid = s.Hospitalid,
@@ -595,13 +595,13 @@ namespace DataAccess.DAO
             }
             return sendBloods;
         }
-        public IEnumerable<Takebloods> GetTakeBlood()
+        public IEnumerable<Takebloods> GetTakeBlood(int id)
         {
             List<Takebloods> sendBloods;
             try
             {
                 var connectDB = new ConnectDB();
-                sendBloods = connectDB.Takebloods.Select(s => new Takebloods
+                sendBloods = connectDB.Takebloods.Where(i => i.Hospitalid == id).Select(s => new Takebloods
                 {
                     Takebloodid = s.Takebloodid,
                     Hospitalid = s.Hospitalid,
@@ -681,7 +681,7 @@ namespace DataAccess.DAO
             }
             return sendBloods;
         }
-        public IEnumerable<NumberBloodDTO> listnumberblood()
+        public IEnumerable<NumberBloodDTO> listnumberblood(int id)
         {
             List<NumberBloodDTO> numberBloods;
             try
@@ -695,7 +695,8 @@ namespace DataAccess.DAO
                                     NameBlood = b.NameBlood,
                                     totalBloodDTOs = (from nb in connectDB.NumberBlood
                                                       join qs in connectDB.QuantitySend on nb.numberbloodid equals qs.numberbloodid
-                                                      where qs.Bloodtypeid == b.Bloodtypeid
+                                                      join c in connectDB.SendBlood on qs.SendBloodid equals c.SendBloodid
+                                                      where qs.Bloodtypeid == b.Bloodtypeid && c.Hospitalid == id
                                                       select new TotalBloodDTO
                                                       {
                                                           numberbloodid = nb.numberbloodid,

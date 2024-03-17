@@ -12,12 +12,13 @@ namespace DataAccess.Repository
     {
         void AddHospital(Hospitals hospitals);
         void AddUser(Users user);
-        IEnumerable<Users> GetListHospital();
+        IEnumerable<Users> GetListHospital(int id);
         Users getUserid(string email);
         IEnumerable<InforHospitalDTO> GetInforHospitalDTOs(int id);
         IEnumerable<InforHospitalDTO> GetInforHospitalTakeBlood(int id);
         void acceptSend(SendBlood sendBlood);
         void accepttake(Takebloods takebloods);
         void acceptRequest(Requests requests);
+        IEnumerable<Requests> GetRequestsByHospital(int id);
     }
 }

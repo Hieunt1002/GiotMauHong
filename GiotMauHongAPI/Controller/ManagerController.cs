@@ -68,11 +68,11 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("listHospital")]
-        public ActionResult<IEnumerable<Users>> GetHospital() 
+        public ActionResult<IEnumerable<Users>> GetHospital(int id) 
         {
             try
             {
-                var user = repository.GetListHospital();
+                var user = repository.GetListHospital(id);
                 if (user == null)
                     return Content("Not found");
                 return Ok(user);
@@ -88,6 +88,22 @@ namespace GiotMauHongAPI.Controller
             try
             {
                 var user = repository.GetInforHospitalDTOs(id);
+                if (user == null)
+                    return Content("Not found");
+                return Ok(user);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        [Route("getblooddonationsession")]
+        public ActionResult<IEnumerable<Requests>> getblooddonationsession(int id)
+        {
+            try
+            {
+                var user = repository.GetRequestsByHospital(id);
                 if (user == null)
                     return Content("Not found");
                 return Ok(user);

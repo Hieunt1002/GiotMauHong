@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using BusinessObject.Model;
+using DataAccess.DTO;
 using DataAccess.Model;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
@@ -332,11 +333,11 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getsendblood")]
-        public ActionResult<IEnumerable<SendBlood>> getlistsendblood()
+        public ActionResult<IEnumerable<SendBlood>> getlistsendblood(int id)
         {
             try
             {
-                var s = repository.GetSendBlood();
+                var s = repository.GetSendBlood(id);
                 return Ok(s);
             }
             catch
@@ -360,11 +361,11 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("gettakeblood")]
-        public ActionResult<IEnumerable<SendBlood>> gettakeblood()
+        public ActionResult<IEnumerable<SendBlood>> gettakeblood(int id)
         {
             try
             {
-                var s = repository.GetTakeBlood();
+                var s = repository.GetTakeBlood(id);
                 return Ok(s);
             }
             catch
@@ -401,11 +402,11 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("displaysremainingblood")]
-        public ActionResult<IEnumerable<NumberBlood>> displaysremainingblood()
+        public ActionResult<IEnumerable<NumberBloodDTO>> displaysremainingblood(int id)
         {
             try
             {
-                return Ok(repository.listnumberblood());
+                return Ok(repository.listnumberblood(id));
             }
             catch
             {

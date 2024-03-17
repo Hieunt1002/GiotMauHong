@@ -380,23 +380,22 @@ namespace DataAccess.DAO
         }
         public void ChangePass(Users users)
         {
-            var id = GetUserByEmail(users.Email);
-            if (id != null)
+            try
             {
                 using (var connectDB = new ConnectDB())
                 {
-                    var email = connectDB.Users.FirstOrDefault(e => e.Email == users.Email);
+                    var email = GetUserByEmail(users.Email);
                     if (email != null)
                     {
-                        email.Password= users.Password;
+                        email.Password = users.Password;
                         connectDB.Entry(email).State = EntityState.Modified;
                         connectDB.SaveChanges();
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("The User does not already exist.");
+                throw new Exception(ex.Message);
             }
         }
 
