@@ -151,5 +151,24 @@ namespace GiotMauHongAPI.Controller
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        [HttpPut]
+        [Route("acceptRequest")]
+        public ActionResult acceptRequest(UpdateStatusDTO updateStatus)
+        {
+            try
+            {
+                var send = new Requests
+                {
+                    Requestid = updateStatus.Id,
+                    status = updateStatus.Status
+                };
+                repository.acceptRequest(send);
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

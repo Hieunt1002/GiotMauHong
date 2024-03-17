@@ -262,5 +262,22 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
+        public void acceptRequest(Requests requests)
+        {
+            try
+            {
+                var connectDB = new ConnectDB();
+                var request = connectDB.Requests.FirstOrDefault(r => r.Requestid == requests.Requestid);
+                if(request != null)
+                {
+                    request.status = requests.status;
+                    connectDB.Entry(request).State = EntityState.Modified;
+                    connectDB.SaveChanges();
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

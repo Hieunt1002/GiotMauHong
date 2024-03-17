@@ -11,6 +11,8 @@ namespace DataAccess.Repository
 {
     public class ManagerRepository : IManagerRepository
     {
+        public void acceptRequest(Requests requests) => ManagerDAO.Instance.acceptRequest(requests);
+
         public void acceptSend(SendBlood sendBlood) => ManagerDAO.Instance.acceptSend(sendBlood);
 
         public void accepttake(Takebloods takebloods) => ManagerDAO.Instance.accepttake(takebloods);

@@ -18,5 +18,6 @@ namespace DataAccess.Repository
         IEnumerable<InforHospitalDTO> GetInforHospitalTakeBlood(int id);
         void acceptSend(SendBlood sendBlood);
         void accepttake(Takebloods takebloods);
+        void acceptRequest(Requests requests);
     }
 }
