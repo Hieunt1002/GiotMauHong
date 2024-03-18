@@ -3,6 +3,7 @@ using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -33,8 +34,19 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
-                if (user == null)
-                    return NotFound();
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (user == null || user.Img == null || user.Email == null || user.Password == null || user.PhoneNumber == null || user.City == null || user.Ward == null || user.District == null || user.Address == null)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 string hash = GetMD5(user.Password);
                 var register = new Users
                 {
@@ -61,7 +73,13 @@ namespace GiotMauHongAPI.Controller
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -70,12 +88,27 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
                 var a = repository.GetActivates();
-                return Ok(a);
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<IEnumerable<Activate>>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = a
+                });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -84,12 +117,37 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (id == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 var a = repository.GetActivatesbyID(id);
-                return Ok(a);
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<Activate>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = a
+                });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpPost]
@@ -98,6 +156,19 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (nameactive == null || nameactive.NameActivate == null || nameactive.aImgs == null)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 var a = new Activate
                 {
                     NameActivate = nameactive.NameActivate,
@@ -117,11 +188,23 @@ namespace GiotMauHongAPI.Controller
                         repository.AddImgforActive(m);
                     }
                 }
-                return NoContent();
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = nameactive.NameActivate
+                });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpPut]
@@ -130,6 +213,19 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (nameactive == null || nameactive.NameActivate == null|| nameactive.ActiveId == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 var a = new Activate
                 {
                     Activateid = nameactive.ActiveId,
@@ -145,11 +241,23 @@ namespace GiotMauHongAPI.Controller
                     };
                     repository.UpdateImgforActive(m);
                 }
-                return NoContent();
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = nameactive.NameActivate
+                });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpDelete]
@@ -158,12 +266,37 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (id == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 repository.DeleteActive(id);
-                return NoContent();
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<int>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = id
+                });
             }
-            catch 
-            { 
-                return StatusCode(StatusCodes.Status500InternalServerError);
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
     }

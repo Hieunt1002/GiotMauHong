@@ -15,33 +15,73 @@ namespace GiotMauHongAPI.Controller
         private IVolunteerRepository repository = new VolunteerRepository();
         private IUserRepository userRepository = new UserRepository();
         [HttpGet]
-        [Route("searchrequest")]
+        [Route("searchrequest/{startdate}/{enddate}/{address}")]
         public ActionResult<IEnumerable<ViewRequest>> searchrequest(DateTime startdate, DateTime enddate, string address)
         {
+
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (startdate == null || enddate == null)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                if (string.IsNullOrEmpty(address))
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 var s = repository.searchRequest(startdate, enddate, address);
-                return Ok(s);
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<IEnumerable<ViewRequest>>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = s
+                });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult> registerRequest(registerRequests register)
         {
-            if (register == null)
-            {
-                return BadRequest("Invalid data provided");
-            }
-
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
                 if (register.Volunteerid == 0 || register.Requestid == 0)
                 {
-                    return BadRequest("Volunteerid and Requestid must be provided");
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
                 }
 
                 var r = new Registers
@@ -59,11 +99,23 @@ namespace GiotMauHongAPI.Controller
                     status = 0
                 };
                 userRepository.addnotification(n);
-                return Ok(r);
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<int>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = r.Volunteerid
+                });
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, "An error occurred while processing the request");
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -72,16 +124,40 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
                 if (id == 0)
                 {
-                    return BadRequest("Invalid data provided");
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
                 }
-                var r = repository.Check(id);
-                return Ok(r);
+                else
+                {
+                    var r = repository.Check(id);
+                    var successResponse = config.SuccessMessages.Successfully;
+                    return Ok(new SuccessResponse<int>
+                    {
+                        StatusCode = successResponse.StatusCode,
+                        Message = successResponse.Message,
+                        Data = r
+                    });
+                }
             }
             catch
             {
-                return StatusCode(500, "An error occurred while processing the request");
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -90,16 +166,37 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
                 if (id == 0)
                 {
-                    return BadRequest("Invalid data provided");
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
                 }
                 var r = repository.GetNotifications(id);
-                return Ok(r);
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<IEnumerable<Notification>>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = r
+                });
             }
             catch
             {
-                return StatusCode(500, "An error occurred while processing the request");
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpPut]
@@ -108,17 +205,42 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (userid == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 var n = new Notification
                 {
                     Userid = userid,
                     status = 1
                 };
                 repository.updatestatusnotification(n);
-                return Content("Successfully");
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = userid.ToString()
+                });
             }
             catch
             {
-                return StatusCode(500, "An error occurred while processing the request");
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -127,10 +249,36 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
-                return repository.countnotification(id);
-            }catch
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (id == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<int>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = repository.countnotification(id)
+                });
+            }
+            catch
             {
-                return StatusCode(500, "An error occurred while processing the request");
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
     }

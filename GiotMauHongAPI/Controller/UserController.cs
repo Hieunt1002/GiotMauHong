@@ -12,6 +12,7 @@ using System.Text;
 using System.Security.Cryptography;
 using DataAccess.Model;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace GiotMauHongAPI.Controller
 {
@@ -46,41 +47,84 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
-                var hash = GetMD5(login.password);
-                var admin = _repository.GetDefaultMember(login.email, hash);
-                if (admin != null)
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (login == null || string.IsNullOrEmpty(login.email) || string.IsNullOrEmpty(login.password))
                 {
-                    var adminS = GenerateToken(admin);
-                    return Ok(new ApiReponse
+                    var error = login == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                    return StatusCode(error.StatusCode, new ErrorMessage
                     {
-                        Success = true,
-                        Message = "Authenticate success",
-                        Data = adminS
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                else if (!IsValidEmail(login.email))
+                {
+                    var error = errorResponse.InvalidEmailFormat;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+
+                else if (login.password.Length < 6)
+                {
+                    var error = errorResponse.PasswordLength;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
                     });
                 }
                 else
                 {
-                    var user = _repository.Login(login.email, hash);
-                    if (user == null)
+                    var hash = GetMD5(login.password);
+                    var admin = _repository.GetDefaultMember(login.email, hash);
+                    if (admin != null)
                     {
+                        var adminS = GenerateToken(admin);
                         return Ok(new ApiReponse
                         {
-                            Success = false,
-                            Message = "Invalid username/pass"
+                            Success = true,
+                            Message = "Authenticate success",
+                            Data = adminS
                         });
                     }
-                    var token = GenerateToken(user);
-                    return Ok(new ApiReponse
+                    else
                     {
-                        Success = true,
-                        Message = "Authenticate success",
-                        Data = token
-                    });
+                        var user = _repository.Login(login.email, hash);
+                        if (user == null)
+                        {
+                            return Ok(new ApiReponse
+                            {
+                                Success = false,
+                                Message = "Invalid username/pass"
+                            });
+                        }
+                        var token = GenerateToken(user);
+                        return Ok(new ApiReponse
+                        {
+                            Success = true,
+                            Message = "Authenticate success",
+                            Data = token
+                        });
+                    }
                 }
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         private string GenerateToken(Users user)
@@ -112,8 +156,12 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
-                if (user == null)
-                    return NotFound();
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                var errorResult = CheckRegistrationErrors(user, errorResponse);
+                if (errorResult != null)
+                    return errorResult;
                 string hash = GetMD5(user.Password);
                 var register = new Users
                 {
@@ -129,43 +177,118 @@ namespace GiotMauHongAPI.Controller
                     Volunteerid = users.UserId
                 };
                 _repository.AddVolunteers(volun);
-                return NoContent();
+
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = user.Email
+                });
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
+
         [HttpPut]
         [Route("ChangePass")]
         public ActionResult ChangePass(Changepass changepass)
         {
             try
             {
-                if (changepass == null)
-                    return NotFound();
-                var check = _repository.checkpass(changepass.email, GetMD5(changepass.oldpassword));
-                if (check == null)
-                {
-                    return Content("Old password is not correct");
-                }
-                else
-                {
-                    string hashedNewPassword = GetMD5(changepass.newpassword);
-                    var change = new Users
-                    {
-                        UserId = check.UserId,
-                        Email = changepass.email,
-                        Password = hashedNewPassword,
-                    };
-                    _repository.ChangePass(change);
+                var config = Config.LoadFromFile("appsettings.json");
 
-                    return Content("Password changed successfully");
+                var errorResponse = config.ErrorMessages;
+                if (changepass == null || string.IsNullOrEmpty(changepass.email) || string.IsNullOrEmpty(changepass.oldpassword) || string.IsNullOrEmpty(changepass.newpassword))
+                {
+                    var error = changepass == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                else if (!IsValidEmail(changepass.email))
+                {
+                    var error = errorResponse.InvalidEmailFormat;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+
+                else if (changepass.newpassword.Length < 6)
+                {
+                    var error = errorResponse.PasswordLength;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                else if (changepass.oldpassword.Length < 6)
+                {
+                    var error = errorResponse.PasswordLength;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }else
+                {
+                    var check = _repository.checkpass(changepass.email, GetMD5(changepass.oldpassword));
+                    if (check == null)
+                    {
+                        var error = errorResponse.ErrorPassword;
+                        return StatusCode(error.StatusCode, new ErrorMessage
+                        {
+                            StatusCode = error.StatusCode,
+                            Message = error.Message,
+                            ErrorDetails = error.ErrorDetails
+                        });
+                    }
+                    else
+                    {
+                        string hashedNewPassword = GetMD5(changepass.newpassword);
+                        var change = new Users
+                        {
+                            UserId = check.UserId,
+                            Email = changepass.email,
+                            Password = hashedNewPassword,
+                        };
+                        _repository.ChangePass(change);
+                        var successResponse = config.SuccessMessages.ChangePassword;
+                        return Ok(new SuccessResponse<string>
+                        {
+                            StatusCode = successResponse.StatusCode,
+                            Message = successResponse.Message,
+                            Data = change.Email
+                        });
+                    }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -174,11 +297,36 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
-                return _repository.gethistory(id);
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (id == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<ViewHistory>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = _repository.gethistory(id)
+                });
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpGet]
@@ -187,30 +335,94 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
-                return _repository.getProfile(id);
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (id == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<Users>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = _repository.getProfile(id)
+            });
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
         [HttpPost]
-        [Route("forgotpass")]
+        [Route("forgotpass/{email}")]
         public async Task<ActionResult> ForgotPassword(string email)
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (email == null)
+                {
+                    var error = errorResponse.EmailRequired;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                else if (!IsValidEmail(email))
+                {
+                    var errorResponses = config.ErrorMessages.BadRequest;
+                    return BadRequest(new ErrorMessage
+                    {
+                        StatusCode = errorResponses.StatusCode,
+                        Message = errorResponses.Message,
+                        ErrorDetails = errorResponses.ErrorDetails
+                    });
+                }
+
                 var token = GenerateTokenForgot(email);
                 var resetLink = "https://localhost:3000/resetpassword/" + token;
                 var emailContent = GetResetPasswordEmailContent(resetLink);
                 var forgot = await _repository.forgotpass(email, emailContent);
-                return Ok(token);
+
+                var successResponse = config.SuccessMessages.ResetPasswordEmailSent;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = token
+                });
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
         }
+
+
         private string GetResetPasswordEmailContent(string resetLink)
         {
             string emailContent = @"<!DOCTYPE html>
@@ -255,6 +467,39 @@ namespace GiotMauHongAPI.Controller
         {
             try
             {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (resetpassword == null || string.IsNullOrEmpty(resetpassword.email) || string.IsNullOrEmpty(resetpassword.password) )
+                {
+                    var error = resetpassword == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                else if (!IsValidEmail(resetpassword.email))
+                {
+                    var error = errorResponse.InvalidEmailFormat;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                else if (resetpassword.password.Length < 6)
+                {
+                    var error = errorResponse.PasswordLength;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
                 string hashedNewPassword = GetMD5(resetpassword.password);
                 var change = new Users
                 {
@@ -262,12 +507,77 @@ namespace GiotMauHongAPI.Controller
                     Password = hashedNewPassword,
                 };
                 _repository.ChangePass(change);
-                return Content("Password changed successfully");
+                var successResponse = config.SuccessMessages.ChangePassword;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = change.Email
+                });
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
             }
+        }
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Kiểm tra định dạng của email sử dụng regex
+                string pattern = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
+                return Regex.IsMatch(email, pattern);
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+        private ActionResult CheckRegistrationErrors(CUser user, ErrorConfig errorResponse)
+        {
+            if (user == null || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+            {
+                var error = user == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                return StatusCode(error.StatusCode, new ErrorMessage
+                {
+                    StatusCode = error.StatusCode,
+                    Message = error.Message,
+                    ErrorDetails = error.ErrorDetails
+                });
+            }
+
+            if (!IsValidEmail(user.Email))
+            {
+                var error = errorResponse.InvalidEmailFormat;
+                return StatusCode(error.StatusCode, new ErrorMessage
+                {
+                    StatusCode = error.StatusCode,
+                    Message = error.Message,
+                    ErrorDetails = error.ErrorDetails
+                });
+            }
+
+            if (user.Password.Length < 6)
+            {
+                var error = errorResponse.PasswordLength;
+                return StatusCode(error.StatusCode, new ErrorMessage
+                {
+                    StatusCode = error.StatusCode,
+                    Message = error.Message,
+                    ErrorDetails = error.ErrorDetails
+                });
+            }
+
+            return null; // Không có lỗi, trả về null
         }
     }
 }
