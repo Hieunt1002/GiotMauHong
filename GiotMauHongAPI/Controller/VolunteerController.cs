@@ -2,6 +2,7 @@
 using DataAccess.Model;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;
@@ -66,6 +67,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("register")]
+        [Authorize]
         public async Task<ActionResult> registerRequest(registerRequests register)
         {
             try
@@ -120,6 +122,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("checkregister")]
+        [Authorize]
         public ActionResult<int> check (int id)
         {
             try
@@ -162,6 +165,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("notification")]
+        [Authorize]
         public ActionResult<Notification> notification(int id)
         {
             try
@@ -201,6 +205,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updatestatusnotification")]
+        [Authorize]
         public ActionResult updatestatusnotification (int userid)
         {
             try
@@ -245,6 +250,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("countnotification")]
+        [Authorize]
         public ActionResult<int> countnotification (int id)
         {
             try

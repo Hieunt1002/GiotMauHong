@@ -2,6 +2,7 @@
 using DataAccess.DTO;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -31,6 +32,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("createhospital")]
+        [Authorize]
         public ActionResult Register(AHospital user)
         {
             try
@@ -92,6 +94,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("listHospital")]
+        [Authorize]
         public ActionResult<IEnumerable<Users>> GetHospital(int id) 
         {
             try
@@ -131,6 +134,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getInforHospitalsendbood")]
+        [Authorize]
         public ActionResult<IEnumerable<InforHospitalDTO>> GetInforHospital(int id)
         {
             try
@@ -170,6 +174,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getblooddonationsession")]
+        [Authorize]
         public ActionResult<IEnumerable<Requests>> getblooddonationsession(int id)
         {
             try
@@ -209,6 +214,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getInforHospitaltakeblood")]
+        [Authorize]
         public ActionResult<IEnumerable<InforHospitalDTO>> getInforHospitaltakeblood(int id)
         {
             try
@@ -248,6 +254,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updatestatussendblood")]
+        [Authorize]
         public ActionResult updatestatussendblood(UpdateStatusDTO updateStatus)
         {
             try
@@ -292,6 +299,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updatestatustakeblood")]
+        [Authorize]
         public ActionResult updatestatustakeblood(UpdateStatusDTO updateStatus)
         {
             try
@@ -336,6 +344,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("acceptRequest")]
+        [Authorize]
         public ActionResult acceptRequest(UpdateStatusDTO updateStatus)
         {
             try

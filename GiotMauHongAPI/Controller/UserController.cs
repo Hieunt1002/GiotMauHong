@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using DataAccess.Model;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GiotMauHongAPI.Controller
 {
@@ -88,11 +89,16 @@ namespace GiotMauHongAPI.Controller
                     if (admin != null)
                     {
                         var adminS = GenerateToken(admin);
-                        return Ok(new ApiReponse
+                        return Ok(new ApiReponse<Users>
                         {
                             Success = true,
                             Message = "Authenticate success",
-                            Data = adminS
+                            Token = adminS,
+                            Data = 
+                            {
+                                Email = "admin@gmail.com",
+                                Role = 0
+                            }
                         });
                     }
                     else
@@ -100,18 +106,25 @@ namespace GiotMauHongAPI.Controller
                         var user = _repository.Login(login.email, hash);
                         if (user == null)
                         {
-                            return Ok(new ApiReponse
+                            return Ok(new ApiReponse<string>
                             {
                                 Success = false,
                                 Message = "Invalid username/pass"
                             });
                         }
                         var token = GenerateToken(user);
-                        return Ok(new ApiReponse
+                        return Ok(new ApiReponse<Users>
                         {
                             Success = true,
                             Message = "Authenticate success",
-                            Data = token
+                            Token = token,
+                            Data = new Users
+                            {
+                                UserId = user.UserId,
+                                Email = user.Email,
+                                Img = user.Img,
+                                Role = user.Role
+                            }
                         });
                     }
                 }
@@ -167,14 +180,23 @@ namespace GiotMauHongAPI.Controller
                 {
                     Email = user.Email,
                     Password = hash,
-                    Role = 1
+                    Img = "null",
+                    PhoneNumber = "0123456789",
+                    City = "null",
+                    Ward= "null",
+                    District= "null",
+                    Address= "null",
+                    Role = 1,
                 };
 
                 _repository.AddUser(register);
                 var users = _repository.getUserid(user.Email);
                 var volun = new Volunteers
                 {
-                    Volunteerid = users.UserId
+                    Volunteerid = users.UserId,
+                    CCCD = "000000000001",
+                    Fullname = "null",
+                    Gender = 0
                 };
                 _repository.AddVolunteers(volun);
 
@@ -200,6 +222,7 @@ namespace GiotMauHongAPI.Controller
 
         [HttpPut]
         [Route("ChangePass")]
+        [Authorize]
         public ActionResult ChangePass(Changepass changepass)
         {
             try
@@ -293,6 +316,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("historyvolunteers")]
+        [Authorize]
         public ActionResult<ViewHistory> Historyvolunteers(int id)
         {
             try
@@ -331,6 +355,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("profile")]
+        [Authorize]
         public ActionResult<Users> profile(int id)
         {
             try
@@ -463,6 +488,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("resetPass")]
+        [Authorize]
         public ActionResult resetPass(resetpassword resetpassword)
         {
             try

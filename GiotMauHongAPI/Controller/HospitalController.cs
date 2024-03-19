@@ -4,6 +4,7 @@ using DataAccess.DTO;
 using DataAccess.Model;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace GiotMauHongAPI.Controller
         private IHospitalRepository repository = new HospitalRepository();
         [HttpGet]
         [Route("listRequest")]
+        [Authorize]
         public ActionResult<IEnumerable<Requests>> getlistrequest(int id)
         {
             try
@@ -63,6 +65,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("AddRequest")]
+        [Authorize]
         public ActionResult AddRequest(ARequest aRequest)
         {
             try
@@ -126,6 +129,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updaterequest")]
+        [Authorize]
         public ActionResult updaterequest(Urequest uRequest)
         {
             try
@@ -180,6 +184,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpDelete]
         [Route("deleterequest")]
+        [Authorize]
         public ActionResult deleterequest(int id)
         {
             try
@@ -219,6 +224,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("listvolunteerregister")]
+        [Authorize]
         public ActionResult<Requests> listvolunteerregister(int id)
         {
             try
@@ -257,6 +263,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("bloodtype")]
+        [Authorize]
         public ActionResult<IEnumerable<Bloodtypes>> getBloodtype()
         {
             try
@@ -283,6 +290,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updateregister")]
+        [Authorize]
         public ActionResult updateregister(URegister uRegister)
         {
             try
@@ -328,6 +336,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("addsendblood")]
+        [Authorize]
         public ActionResult addsendblood(AddSendBloodDTO addSendBloodDTO)
         {
             try
@@ -409,6 +418,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("addtakeblood")]
+        [Authorize]
         public ActionResult addtakeblood(AddTakeBloodDTO addTakeBloodDTO)
         {
             try
@@ -490,6 +500,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updatesendblood")]
+        [Authorize]
         public ActionResult updatesendblood (List<UpdateQuantitySendDTO> updateQuantitySendDTOs)
         {
             try
@@ -539,6 +550,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updatetakeblood")]
+        [Authorize]
         public ActionResult updatetakeblood(List<UpdateQuantityTakeDTO> updateQuantityTakeDTOs)
         {
             try
@@ -588,6 +600,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpDelete]
         [Route("cancelsend")]
+        [Authorize]
         public ActionResult cancelsend(int id)
         {
             try
@@ -627,6 +640,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpDelete]
         [Route("canceltake")]
+        [Authorize]
         public ActionResult canceltake(int id)
         {
             try
@@ -666,6 +680,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getsendblood")]
+        [Authorize]
         public ActionResult<IEnumerable<SendBlood>> getlistsendblood(int id)
         {
             try
@@ -705,6 +720,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getlistsendbloodbyid")]
+        [Authorize]
         public ActionResult<SendBlood> getlistsendbloodbyid(int id)
         {
             try
@@ -744,6 +760,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("gettakeblood")]
+        [Authorize]
         public ActionResult<IEnumerable<Takebloods>> gettakeblood(int id)
         {
             try
@@ -783,6 +800,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getlisttakebloodbyid")]
+        [Authorize]
         public ActionResult<IEnumerable<Takebloods>> getlisttakebloodbyid(int id)
         {
             try
@@ -848,6 +866,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("displaysremainingblood")]
+        [Authorize]
         public ActionResult<IEnumerable<NumberBloodDTO>> displaysremainingblood(int id)
         {
             try
@@ -886,6 +905,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpGet]
         [Route("getSendBloodbyhospitalid")]
+        [Authorize]
         public ActionResult<IEnumerable<SendBlood>> GetSendBloodbyhospitalid(int id)
         {
             try

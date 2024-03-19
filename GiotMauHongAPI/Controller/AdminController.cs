@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Model;
 using DataAccess.Repository;
 using GiotMauHongAPI.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -30,6 +31,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("createbloodbank")]
+        [Authorize]
         public ActionResult Register(ABloodBank user)
         {
             try
@@ -152,6 +154,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPost]
         [Route("addactive")]
+        [Authorize]
         public ActionResult AddActive(AddActive nameactive)
         {
             try
@@ -209,6 +212,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("updateactive")]
+        [Authorize]
         public ActionResult UpdateActive(UpdateActive nameactive)
         {
             try
@@ -262,6 +266,7 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpDelete]
         [Route("deleteactive")]
+        [Authorize]
         public ActionResult deleteactive(int id)
         {
             try

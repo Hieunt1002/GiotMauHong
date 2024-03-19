@@ -24,18 +24,50 @@ namespace GiotMauHongAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddSwaggerGen(option =>
+            {
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+                    });
+            });
+
             services.AddControllers().AddOData(option => option.Select().Filter().Count().OrderBy().Expand()
             .SetMaxTop(100).AddRouteComponents("odata", GetEdmModel()));
+
             services.AddDbContext<ConnectDB>(option =>
             {
                 option.UseSqlServer(Configuration.GetConnectionString("GiotMauHong"));
             });
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IManagerRepository, ManagerRepository>();
             services.AddScoped<IHospitalRepository, HospitalRepository>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();
+
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             var secretKey = Configuration["AppSettings:ScretKey"];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 
@@ -45,12 +77,12 @@ namespace GiotMauHongAPI
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
             services.AddCors();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson()
@@ -59,6 +91,7 @@ namespace GiotMauHongAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Project", Version = "v1" });
             });
+
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
