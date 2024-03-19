@@ -94,7 +94,7 @@ namespace GiotMauHongAPI.Controller
                             Success = true,
                             Message = "Authenticate success",
                             Token = adminS,
-                            Data = 
+                            Data = new Users
                             {
                                 Email = "admin@gmail.com",
                                 Role = 0
