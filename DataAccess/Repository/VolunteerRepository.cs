@@ -20,7 +20,7 @@ namespace DataAccess.Repository
 
         public async Task regesterRequest(Registers registers) => await VolunteersDAO.Instance.regesterRequest(registers);
 
-        public IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, string address) => VolunteersDAO.Instance.searchRequest(startdate, enddate, address);
+        public IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, int volunteerid) => VolunteersDAO.Instance.searchRequest(startdate, enddate, volunteerid);
 
         public void updatestatusnotification(Notification notification) => VolunteersDAO.Instance.updatestatusnotification(notification);
     }

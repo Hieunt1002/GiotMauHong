@@ -10,7 +10,7 @@ namespace DataAccess.Repository
 {
     public interface IVolunteerRepository
     {
-        IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, string address);
+        IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, int volunteerid);
         Task regesterRequest(Registers registers);
         int Check(int id);
         IEnumerable<Notification> GetNotifications(int id);

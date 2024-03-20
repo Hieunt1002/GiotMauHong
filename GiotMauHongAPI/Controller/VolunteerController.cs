@@ -5,6 +5,7 @@ using GiotMauHongAPI.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Win32;
 
 namespace GiotMauHongAPI.Controller
@@ -16,8 +17,8 @@ namespace GiotMauHongAPI.Controller
         private IVolunteerRepository repository = new VolunteerRepository();
         private IUserRepository userRepository = new UserRepository();
         [HttpGet]
-        [Route("searchrequest/{startdate}/{enddate}/{address}")]
-        public ActionResult<IEnumerable<ViewRequest>> searchrequest(DateTime startdate, DateTime enddate, string address)
+        [Route("searchrequest")]
+        public ActionResult<IEnumerable<ViewRequest>> searchrequest(DateTime startdate, DateTime enddate, int volunteerid)
         {
 
             try
@@ -35,17 +36,7 @@ namespace GiotMauHongAPI.Controller
                         ErrorDetails = error.ErrorDetails
                     });
                 }
-                if (string.IsNullOrEmpty(address))
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-                var s = repository.searchRequest(startdate, enddate, address);
+                var s = repository.searchRequest(startdate, enddate, volunteerid);
                 var successResponse = config.SuccessMessages.Successfully;
                 return Ok(new SuccessResponse<IEnumerable<ViewRequest>>
                 {

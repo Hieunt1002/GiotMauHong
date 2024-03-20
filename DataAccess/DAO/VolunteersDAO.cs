@@ -29,17 +29,19 @@ namespace DataAccess.DAO
                 }
             }
         }
-        public IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, string address)
+        public IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, int volunteerid)
         {
             List<ViewRequest> requests = null;
             try
             {
                 var connectDB = new ConnectDB();
-                requests = (from r in connectDB.Requests
+                var query = from r in connectDB.Requests
                             join h in connectDB.Hospitals on r.Hospitalid equals h.Hospitalid
                             join d in connectDB.Registers on r.Requestid equals d.Requestid into registerGroup
                             from d in registerGroup.DefaultIfEmpty()
-                            where r.RequestDate >= startdate && r.RequestDate <= enddate && r.City == address && r.status != 0
+                            where (r.RequestDate >= startdate && r.RequestDate <= enddate) &&
+                                  (volunteerid == 0 || r.City == connectDB.Users.FirstOrDefault(u => u.UserId == volunteerid).City) &&
+                                  r.status != 0
                             select new ViewRequest
                             {
                                 Requestid = r.Requestid,
@@ -56,7 +58,9 @@ namespace DataAccess.DAO
                                 Hospitals = h,
                                 total = ((double)connectDB.Registers.Count(c => c.Requestid == r.Requestid) / r.quantity) * 100,
                                 status = r.RequestDate < DateTime.Today ? 0 : 1
-                            }).ToList();
+                            };
+
+                requests = query.ToList();
             }
             catch (Exception ex)
             {
