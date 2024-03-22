@@ -30,7 +30,9 @@ namespace DataAccess.Repository
         public Users getUserid(string email) => UserDAO.Instance.GetUserByEmail(email);
 
         public Users Login(string email, string password) => UserDAO.Instance.Login(email, password);
+
         public void addnotification(Notification notification) => UserDAO.Instance.addnotification(notification);
 
+        public void updateProfile(Users users) => UserDAO.Instance.updateProfile(users);
     }
 }

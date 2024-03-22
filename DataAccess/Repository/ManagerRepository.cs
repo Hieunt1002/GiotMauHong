@@ -30,5 +30,9 @@ namespace DataAccess.Repository
         public IEnumerable<Requests> GetRequestsByHospital(int id) => ManagerDAO.Instance.GetRequestsByHospital(id);
 
         public Users getUserid(string email) => ManagerDAO.Instance.getUserid(email);
+
+        public IEnumerable<Requests> ListRequestsByBloodbank(int id) => ManagerDAO.Instance.ListRequestsByBloodbank(id);
+
+        public void updateProfileBloodbank(Bloodbank users) => ManagerDAO.Instance.updateProfileBloodbank(users);
     }
 }

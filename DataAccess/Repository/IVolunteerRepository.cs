@@ -16,5 +16,6 @@ namespace DataAccess.Repository
         IEnumerable<Notification> GetNotifications(int id);
         void updatestatusnotification(Notification notification);
         int countnotification(int id);
+        void updateProfileVolunteer(Volunteers users);
     }
 }

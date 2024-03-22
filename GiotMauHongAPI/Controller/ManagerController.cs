@@ -387,5 +387,45 @@ namespace GiotMauHongAPI.Controller
                 });
             }
         }
+        [HttpGet]
+        [Route("listRequestsByBloodbank")]
+        [Authorize]
+        public ActionResult<IEnumerable<Requests>> ListRequestsByBloodbank(int bloodbankid)
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (bloodbankid == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var user = repository.ListRequestsByBloodbank(bloodbankid);
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<IEnumerable<Requests>>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = user
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
     }
 }

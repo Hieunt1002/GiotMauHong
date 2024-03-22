@@ -37,5 +37,6 @@ namespace DataAccess.Repository
         void updatetakeblood(QuantityTake quantityTake);
         IEnumerable<NumberBloodDTO> listnumberblood(int id);
         IEnumerable<SendBlood> GetSendBloodbyhospitalid(int id);
+        void updateProfileHospotal(Hospitals users);
     }
 }

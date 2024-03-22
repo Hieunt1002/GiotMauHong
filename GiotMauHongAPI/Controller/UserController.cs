@@ -23,6 +23,10 @@ namespace GiotMauHongAPI.Controller
     {
         private readonly IUserRepository _repository;
         private readonly AppSettings _appSettings;
+        private IHospitalRepository repositoryHospital = new HospitalRepository();
+        private IVolunteerRepository repositoryVolunteer = new VolunteerRepository();
+        private IManagerRepository repositorybloodbank = new ManagerRepository();
+
         public UserController(IUserRepository repository, IOptionsMonitor<AppSettings> optionsMonitor)
         {
             _repository = repository;
@@ -106,7 +110,7 @@ namespace GiotMauHongAPI.Controller
                         var user = _repository.Login(login.email, hash);
                         if (user == null)
                         {
-                            return Ok(new ApiReponse<string>
+                            return BadRequest(new ApiReponse<string>
                             {
                                 Success = false,
                                 Message = "Invalid username/pass"
@@ -604,6 +608,177 @@ namespace GiotMauHongAPI.Controller
             }
 
             return null; // Không có lỗi, trả về null
+        }
+        [HttpPut]
+        [Route("updateProfileVolunteer")]
+        [Authorize]
+        public ActionResult UpdateProfile(UpdateProfileDTO updateProfile)
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (updateProfile == null)
+                {
+                    var error = updateProfile == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var user = new Users
+                {
+                    UserId= updateProfile.UserId,
+                    Img = updateProfile.Img,
+                    PhoneNumber= updateProfile.PhoneNumber,
+                    City= updateProfile.City,
+                    Ward= updateProfile.Ward,
+                    District= updateProfile.District,
+                    Address= updateProfile.Address
+                };
+                var volunteer = new Volunteers
+                {
+                    Volunteerid = updateProfile.UserId,
+                    Birthdate = updateProfile.Birthdate,
+                    Gender = updateProfile.Gender,
+                    Fullname = updateProfile.Fullname,
+                    CCCD = updateProfile.CCCD
+                };
+                _repository.updateProfile(user);
+                repositoryVolunteer.updateProfileVolunteer(volunteer);
+                var successResponse = config.SuccessMessages.ChangePassword;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = user.Email
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
+        [HttpPut]
+        [Route("updateProfileHospital")]
+        [Authorize]
+        public ActionResult updateProfileHospital(UpdateHospitalDTO updateProfile)
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (updateProfile == null)
+                {
+                    var error = updateProfile == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var user = new Users
+                {
+                    UserId = updateProfile.UserId,
+                    Img = updateProfile.Img,
+                    PhoneNumber = updateProfile.PhoneNumber,
+                    City = updateProfile.City,
+                    Ward = updateProfile.Ward,
+                    District = updateProfile.District,
+                    Address = updateProfile.Address
+                };
+                var volunteer = new Hospitals
+                {
+                    Hospitalid = updateProfile.UserId,
+                    NameHospital = updateProfile.NameHospital,
+                };
+                _repository.updateProfile(user);
+                repositoryHospital.updateProfileHospotal(volunteer);
+                var successResponse = config.SuccessMessages.ChangePassword;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = user.Email
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
+        [HttpPut]
+        [Route("updateProfilebloodbank")]
+        [Authorize]
+        public ActionResult updateProfilebloodbank(updatebloodbank updateProfile)
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (updateProfile == null)
+                {
+                    var error = updateProfile == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var user = new Users
+                {
+                    UserId = updateProfile.UserId,
+                    Img = updateProfile.Img,
+                    PhoneNumber = updateProfile.PhoneNumber,
+                    City = updateProfile.City,
+                    Ward = updateProfile.Ward,
+                    District = updateProfile.District,
+                    Address = updateProfile.Address
+                };
+                var volunteer = new Bloodbank
+                {
+                    Bloodbankid = updateProfile.UserId,
+                    NameBloodbank = updateProfile.NameBloodbank,
+                };
+                _repository.updateProfile(user);
+                repositorybloodbank.updateProfileBloodbank(volunteer);
+                var successResponse = config.SuccessMessages.ChangePassword;
+                return Ok(new SuccessResponse<string>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = user.Email
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
         }
     }
 }

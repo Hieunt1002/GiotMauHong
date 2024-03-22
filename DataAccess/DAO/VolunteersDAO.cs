@@ -128,7 +128,6 @@ namespace DataAccess.DAO
                           || r.RequestDate <= DateTime.Now.AddMonths(-3)) && c.Volunteerid == id
                           select c
                           ).Count();
-
             }
             catch (Exception ex)
             {
@@ -143,7 +142,8 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 notifications = connectDB.Notification.Where(n => n.Userid == id).ToList();
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 throw new Exception("Error occurred while request", ex);
             }
@@ -185,6 +185,27 @@ namespace DataAccess.DAO
                 throw new Exception("Error occurred while request", ex);
             }
             return total;
+        }
+        public void updateProfileVolunteer(Volunteers users)
+        {
+            try
+            {
+                var connectDB = new ConnectDB();
+                var use = connectDB.Volunteers.FirstOrDefault(n => n.Volunteerid == users.Volunteerid);
+                if (use != null)
+                {
+                    use.Birthdate= users.Birthdate;
+                    use.Gender= users.Gender;
+                    use.Fullname= users.Fullname;
+                    use.CCCD= users.CCCD;
+                    connectDB.Entry(use).State = EntityState.Modified;
+                    connectDB.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

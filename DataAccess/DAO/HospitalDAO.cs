@@ -711,6 +711,23 @@ namespace DataAccess.DAO
             }
             return numberBloods;
         }
-
+        public void updateProfileHospotal(Hospitals users)
+        {
+            try
+            {
+                var connectDB = new ConnectDB();
+                var use = connectDB.Hospitals.FirstOrDefault(n => n.Hospitalid == users.Hospitalid);
+                if (use != null)
+                {
+                    use.NameHospital = users.NameHospital;
+                    connectDB.Entry(use).State = EntityState.Modified;
+                    connectDB.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

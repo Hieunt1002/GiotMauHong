@@ -316,5 +316,60 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
+        public IEnumerable<Requests> ListRequestsByBloodbank(int id)
+        {
+            List<Requests> hospitals;
+            try
+            {
+                var connectDB = new ConnectDB();
+                hospitals = (from h in connectDB.Requests
+                             join r in connectDB.Hospitals on h.Hospitalid equals r.Hospitalid
+                             where r.Bloodbankid == id
+                             select new Requests
+                             {
+                                 Requestid = h.Requestid,
+                                 Hospitalid = h.Hospitalid,
+                                 RequestDate = h.RequestDate,
+                                 quantity = h.quantity,
+                                 Contact = h.Contact,
+                                 Starttime = h.Starttime,
+                                 Endtime = h.Endtime,
+                                 City = h.City,
+                                 Ward = h.Ward,
+                                 District = h.District,
+                                 Address = h.Address,
+                                 Hospitals = new Hospitals
+                                 {
+                                     Hospitalid = r.Hospitalid,
+                                     NameHospital = r.NameHospital,
+                                     Users = r.Users,
+                                 },
+                                 status = h.status
+                             }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return hospitals;
+        }
+        public void updateProfileBloodbank(Bloodbank users)
+        {
+            try
+            {
+                var connectDB = new ConnectDB();
+                var use = connectDB.Bloodbank.FirstOrDefault(n => n.Bloodbankid == users.Bloodbankid);
+                if (use != null)
+                {
+                    use.Bloodbankid = users.Bloodbankid;
+                    connectDB.Entry(use).State = EntityState.Modified;
+                    connectDB.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -20,5 +20,7 @@ namespace DataAccess.Repository
         void accepttake(Takebloods takebloods);
         void acceptRequest(Requests requests);
         IEnumerable<Requests> GetRequestsByHospital(int id);
+        IEnumerable<Requests> ListRequestsByBloodbank(int id);
+        void updateProfileBloodbank(Bloodbank users);
     }
 }

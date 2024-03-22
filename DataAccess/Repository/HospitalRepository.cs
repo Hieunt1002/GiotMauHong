@@ -56,6 +56,8 @@ namespace DataAccess.Repository
 
         public int takebookid(int hopitalid) => HospitalDAO.Instance.takebookid(hopitalid);
 
+        public void updateProfileHospotal(Hospitals users) => HospitalDAO.Instance.updateProfileHospotal(users);
+
         public void UpdateRegister(Registers registers) => HospitalDAO.Instance.UpdateRegister(registers);
 
         public void UpdateRequest(Requests request) => HospitalDAO.Instance.UpdateRequest(request);

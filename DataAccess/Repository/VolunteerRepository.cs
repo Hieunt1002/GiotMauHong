@@ -22,6 +22,8 @@ namespace DataAccess.Repository
 
         public IEnumerable<ViewRequest> searchRequest(DateTime startdate, DateTime enddate, int volunteerid) => VolunteersDAO.Instance.searchRequest(startdate, enddate, volunteerid);
 
+        public void updateProfileVolunteer(Volunteers users) => VolunteersDAO.Instance.updateProfileVolunteer(users);
+
         public void updatestatusnotification(Notification notification) => VolunteersDAO.Instance.updatestatusnotification(notification);
     }
 }
