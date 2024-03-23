@@ -50,7 +50,7 @@ namespace GiotMauHongAPI.Controller
                     Ward = user.Ward,
                     District = user.District,
                     Address = user.Address,
-                    Role = 2
+                    Role = 3
                 };
 
                 repository.AddUser(register);
@@ -103,7 +103,7 @@ namespace GiotMauHongAPI.Controller
                 });
             }
         }
-        [HttpGet]
+        [HttpGet] 
         [Route("lisbloodbank")]
         [Authorize]
         public ActionResult<IEnumerable<Users>> lisbloodbank()
