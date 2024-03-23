@@ -17,5 +17,6 @@ namespace DataAccess.Repository
         void updatestatusnotification(Notification notification);
         int countnotification(int id);
         void updateProfileVolunteer(Volunteers users);
+        int countRegister(int id);
     }
 }

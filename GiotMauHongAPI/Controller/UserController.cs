@@ -184,12 +184,12 @@ namespace GiotMauHongAPI.Controller
                 {
                     Email = user.Email,
                     Password = hash,
-                    Img = "null",
-                    PhoneNumber = "0123456789",
-                    City = "null",
-                    Ward= "null",
-                    District= "null",
-                    Address= "null",
+                    Img = "",
+                    PhoneNumber = "",
+                    City = "",
+                    Ward= "",
+                    District= "",
+                    Address= "",
                     Role = 1,
                 };
 

@@ -35,7 +35,7 @@ namespace DataAccess.DAO
             try
             {
                 var connectDB = new ConnectDB();
-                var query = from r in connectDB.Requests
+                var query = (from r in connectDB.Requests
                             join h in connectDB.Hospitals on r.Hospitalid equals h.Hospitalid
                             join d in connectDB.Registers on r.Requestid equals d.Requestid into registerGroup
                             from d in registerGroup.DefaultIfEmpty()
@@ -58,7 +58,7 @@ namespace DataAccess.DAO
                                 Hospitals = h,
                                 total = ((double)connectDB.Registers.Count(c => c.Requestid == r.Requestid) / r.quantity) * 100,
                                 status = r.RequestDate < DateTime.Today ? 0 : 1
-                            };
+                            }).Distinct();
 
                 requests = query.ToList();
             }
@@ -206,6 +206,23 @@ namespace DataAccess.DAO
             {
                 throw new Exception(ex.Message);
             }
+        }
+        public int countRegister(int id)
+        {
+            int user = 0;
+            try
+            {
+                var connectDB = new ConnectDB();
+                user = (from u in connectDB.Registers
+                        where u.Volunteerid == id && u.Quantity != 0
+                        select u
+                        ).Count();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return user;
         }
     }
 }

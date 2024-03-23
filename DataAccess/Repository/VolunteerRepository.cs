@@ -16,6 +16,8 @@ namespace DataAccess.Repository
 
         public int countnotification(int id) => VolunteersDAO.Instance.countnotification(id);
 
+        public int countRegister(int id) => VolunteersDAO.Instance.countRegister(id);
+
         public IEnumerable<Notification> GetNotifications(int id) => VolunteersDAO.Instance.GetNotifications(id);
 
         public async Task regesterRequest(Registers registers) => await VolunteersDAO.Instance.regesterRequest(registers);
