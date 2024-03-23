@@ -39,16 +39,6 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                if (user == null || user.Img == null || user.Email == null || user.Password == null || user.PhoneNumber == null || user.City == null || user.Ward == null || user.District == null || user.Address == null)
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
                 string hash = GetMD5(user.Password);
                 var register = new Users
                 {
@@ -96,6 +86,36 @@ namespace GiotMauHongAPI.Controller
                 var a = repository.GetActivates();
                 var successResponse = config.SuccessMessages.RegistrationSuccess;
                 return Ok(new SuccessResponse<IEnumerable<Activate>>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = a
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
+        [HttpGet]
+        [Route("lisbloodbank")]
+        [Authorize]
+        public ActionResult<IEnumerable<Users>> lisbloodbank()
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                var a = repository.GetListBloodbank();
+                var successResponse = config.SuccessMessages.RegistrationSuccess;
+                return Ok(new SuccessResponse<IEnumerable<Users>>
                 {
                     StatusCode = successResponse.StatusCode,
                     Message = successResponse.Message,
@@ -162,16 +182,6 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                if (nameactive == null || nameactive.NameActivate == null || nameactive.aImgs == null)
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
                 var a = new Activate
                 {
                     NameActivate = nameactive.NameActivate,
@@ -220,7 +230,7 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                if (nameactive == null || nameactive.NameActivate == null|| nameactive.ActiveId == 0)
+                if (nameactive.ActiveId == 0)
                 {
                     var error = errorResponse.CheckEmpty;
                     return StatusCode(error.StatusCode, new ErrorMessage
