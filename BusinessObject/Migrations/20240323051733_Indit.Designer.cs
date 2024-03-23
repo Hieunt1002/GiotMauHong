@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessObject.Migrations
 {
     [DbContext(typeof(ConnectDB))]
-    [Migration("20240311141949_Indit")]
+    [Migration("20240323051733_Indit")]
     partial class Indit
     {
         /// <inheritdoc />
@@ -333,6 +333,10 @@ namespace BusinessObject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ward")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("img")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

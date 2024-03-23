@@ -333,6 +333,10 @@ namespace BusinessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("img")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 

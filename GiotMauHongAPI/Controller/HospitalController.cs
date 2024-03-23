@@ -88,6 +88,7 @@ namespace GiotMauHongAPI.Controller
                 var request = new Requests
                 {
                     Hospitalid = aRequest.Hospitalid,
+                    img = aRequest.img,
                     RequestDate = aRequest.RequestDate,
                     quantity = aRequest.quantity,
                     Contact = aRequest.Contact,

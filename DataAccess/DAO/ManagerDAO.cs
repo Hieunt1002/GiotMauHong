@@ -329,6 +329,7 @@ namespace DataAccess.DAO
                              {
                                  Requestid = h.Requestid,
                                  Hospitalid = h.Hospitalid,
+                                 img = h.img,
                                  RequestDate = h.RequestDate,
                                  quantity = h.quantity,
                                  Contact = h.Contact,
