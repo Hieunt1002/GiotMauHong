@@ -88,6 +88,7 @@ namespace GiotMauHongAPI.Controller
                 var request = new Requests
                 {
                     Hospitalid = aRequest.Hospitalid,
+                    img = aRequest.img,
                     RequestDate = aRequest.RequestDate,
                     quantity = aRequest.quantity,
                     Contact = aRequest.Contact,
@@ -137,21 +138,10 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                if (uRequest == null || uRequest.Requestid == 0 || uRequest.RequestDate == null ||
-                    uRequest.quantity == 0 || uRequest.Contact == null || uRequest.Starttime == null ||
-                    uRequest.Endtime == null || uRequest.City == null || uRequest.Ward == null || uRequest.District == null || uRequest.Address == null)
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
                 var request = new Requests
                 {
                     Requestid = uRequest.Requestid,
+                    img = uRequest.img,
                     RequestDate = uRequest.RequestDate,
                     quantity = uRequest.quantity,
                     Contact = uRequest.Contact,

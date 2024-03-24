@@ -12,6 +12,7 @@ namespace DataAccess.Model
     {
         public int Requestid { get; set; }
         public int Hospitalid { get; set; }
+        public string Img { get; set; }
         public DateTime RequestDate { get; set; }
         public int quantity { get; set; }
         public string Contact { get; set; }

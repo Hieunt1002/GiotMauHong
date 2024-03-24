@@ -43,6 +43,7 @@ namespace DataAccess.DAO
                              {
                                  Requestid = h.Requestid,
                                  Hospitalid = h.Hospitalid,
+                                 img = h.img,
                                  RequestDate = h.RequestDate,
                                  quantity = h.quantity,
                                  Contact = h.Contact,
@@ -80,6 +81,7 @@ namespace DataAccess.DAO
                              {
                                  Requestid = h.Requestid,
                                  Hospitalid = h.Hospitalid,
+                                 img = h.img,
                                  RequestDate = h.RequestDate,
                                  quantity = h.quantity,
                                  Contact = h.Contact,
@@ -123,6 +125,7 @@ namespace DataAccess.DAO
                 var r = connectDB.Requests.FirstOrDefault(n => n.Requestid == request.Requestid);
                 if (r != null)
                 {
+                    r.img = request.img;
                     r.RequestDate = request.RequestDate;
                     r.quantity = request.quantity;
                     r.Contact = request.Contact;
@@ -169,6 +172,7 @@ namespace DataAccess.DAO
                 request = connectDB.Requests.Where(r => r.Requestid == id).Select(c => new Requests
                 {
                     Requestid = c.Requestid,
+                    img = c.img,
                     RequestDate = c.RequestDate,
                     quantity = c.quantity,
                     Contact = c.Contact,
@@ -211,6 +215,7 @@ namespace DataAccess.DAO
                            select new Requests
                            {
                                Requestid = c.Requestid,
+                               img = c.img,
                                RequestDate = c.RequestDate,
                                quantity = c.quantity,
                                Contact = c.Contact,
