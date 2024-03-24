@@ -26,6 +26,8 @@ namespace DataAccess.Repository
 
         public int GetActive() => AdminDAO.Instance.GetActive();
 
+        public IEnumerable<Users> GetListBloodbank() => AdminDAO.Instance.GetListBloodbank();
+
         public Users GetUserByEmail(string email) => AdminDAO.Instance.GetUserByEmail(email);
 
         public void UpdateActive(Activate activate) => AdminDAO.Instance.UpdateActive(activate);

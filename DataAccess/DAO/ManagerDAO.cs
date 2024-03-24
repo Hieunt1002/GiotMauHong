@@ -103,6 +103,7 @@ namespace DataAccess.DAO
                                  Ward = u.Ward,
                                  District = u.District,
                                  Address = u.Address,
+                                 Role = u.Role,
                                  Hospitals = h
                              }).ToList();
             }

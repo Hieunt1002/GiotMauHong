@@ -227,6 +227,33 @@ namespace DataAccess.DAO
             }
             return id;
         }
+        public IEnumerable<Users> GetListBloodbank()
+        {
+            List<Users> hospitals;
+            try
+            {
+                var connectDB = new ConnectDB();
+                hospitals = (from u in connectDB.Users
+                             join h in connectDB.Bloodbank on u.UserId equals h.Bloodbankid
+                             select new Users
+                             {
+                                 UserId = u.UserId,
+                                 Img = u.Img,
+                                 Email = u.Email,
+                                 PhoneNumber = u.PhoneNumber,
+                                 City = u.City,
+                                 Ward = u.Ward,
+                                 District = u.District,
+                                 Address = u.Address,
+                                 Bloodbank = h
+                             }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return hospitals;
+        }
 
     }
 }

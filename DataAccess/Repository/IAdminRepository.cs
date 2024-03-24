@@ -20,5 +20,6 @@ namespace DataAccess.Repository
         void AddUser(Users user);
         Users GetUserByEmail(string email);
         int GetActive();
+        IEnumerable<Users> GetListBloodbank();
     }
 }
