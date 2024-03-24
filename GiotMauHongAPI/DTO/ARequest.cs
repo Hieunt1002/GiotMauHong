@@ -3,6 +3,7 @@
     public class ARequest
     {
         public int Hospitalid { get; set; }
+        public string img { get; set; }
         public DateTime RequestDate { get; set; }
         public int quantity { get; set; }
         public string Contact { get; set; }

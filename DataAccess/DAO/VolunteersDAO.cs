@@ -46,6 +46,7 @@ namespace DataAccess.DAO
                             {
                                 Requestid = r.Requestid,
                                 Hospitalid = r.Hospitalid,
+                                Img = r.img,
                                 RequestDate = r.RequestDate,
                                 quantity = r.quantity,
                                 Contact = r.Contact,

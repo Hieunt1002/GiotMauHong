@@ -186,6 +186,7 @@ namespace BusinessObject.Migrations
                     Requestid = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Hospitalid = table.Column<int>(type: "int", nullable: false),
+                    img = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: false),
                     Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
