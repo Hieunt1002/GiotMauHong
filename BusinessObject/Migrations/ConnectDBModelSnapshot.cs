@@ -333,6 +333,10 @@ namespace BusinessObject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("img")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 
@@ -446,6 +450,9 @@ namespace BusinessObject.Migrations
                     b.Property<string>("Ward")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("deactive")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId");
 

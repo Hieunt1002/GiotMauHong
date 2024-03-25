@@ -245,7 +245,8 @@ namespace DataAccess.DAO
                                  Ward = u.Ward,
                                  District = u.District,
                                  Address = u.Address,
-                                 Bloodbank = h
+                                 Bloodbank = h,
+                                 deactive = u.deactive
                              }).ToList();
             }
             catch (Exception ex)

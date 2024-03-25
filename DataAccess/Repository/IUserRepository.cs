@@ -22,5 +22,6 @@ namespace DataAccess.Repository
         Task<string> forgotpass(string email, string content);
         void addnotification(Notification notification);
         void updateProfile(Users users);
+        void updateDeactive(Users users);
     }
 }

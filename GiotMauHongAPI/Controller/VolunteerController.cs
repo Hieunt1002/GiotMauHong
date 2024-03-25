@@ -20,41 +20,15 @@ namespace GiotMauHongAPI.Controller
         [Route("searchrequest")]
         public ActionResult<IEnumerable<ViewRequest>> searchrequest(DateTime startdate, DateTime enddate, int volunteerid)
         {
-
-            try
+            var config = Config.LoadFromFile("appsettings.json");
+            var s = repository.searchRequest(startdate, enddate, volunteerid);
+            var successResponse = config.SuccessMessages.Successfully;
+            return Ok(new SuccessResponse<IEnumerable<ViewRequest>>
             {
-                var config = Config.LoadFromFile("appsettings.json");
-
-                var errorResponse = config.ErrorMessages;
-                if (startdate == null || enddate == null)
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-                var s = repository.searchRequest(startdate, enddate, volunteerid);
-                var successResponse = config.SuccessMessages.Successfully;
-                return Ok(new SuccessResponse<IEnumerable<ViewRequest>>
-                {
-                    StatusCode = successResponse.StatusCode,
-                    Message = successResponse.Message,
-                    Data = s
-                });
-            }
-            catch
-            {
-                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
-                return StatusCode(errorResponse.StatusCode, new ErrorMessage
-                {
-                    StatusCode = errorResponse.StatusCode,
-                    Message = errorResponse.Message,
-                    ErrorDetails = errorResponse.ErrorDetails
-                });
-            }
+                StatusCode = successResponse.StatusCode,
+                Message = successResponse.Message,
+                Data = s
+            });
         }
         [HttpPost]
         [Route("register")]

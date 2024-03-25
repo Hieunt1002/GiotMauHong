@@ -61,7 +61,8 @@ namespace GiotMauHongAPI.Controller
                     Ward= user.Ward,
                     District= user.District,
                     Address= user.Address,
-                    Role = 2
+                    Role = 2,
+                    deactive = 1
                 };
 
                 repository.AddUser(register);

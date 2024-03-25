@@ -104,7 +104,8 @@ namespace DataAccess.DAO
                                  District = u.District,
                                  Address = u.Address,
                                  Role = u.Role,
-                                 Hospitals = h
+                                 Hospitals = h,
+                                 deactive = u.deactive
                              }).ToList();
             }
             catch(Exception ex)
@@ -363,7 +364,7 @@ namespace DataAccess.DAO
                 var use = connectDB.Bloodbank.FirstOrDefault(n => n.Bloodbankid == users.Bloodbankid);
                 if (use != null)
                 {
-                    use.Bloodbankid = users.Bloodbankid;
+                    use.NameBloodbank = users.NameBloodbank;
                     connectDB.Entry(use).State = EntityState.Modified;
                     connectDB.SaveChanges();
                 }
@@ -373,5 +374,6 @@ namespace DataAccess.DAO
                 throw new Exception(ex.Message);
             }
         }
+        
     }
 }

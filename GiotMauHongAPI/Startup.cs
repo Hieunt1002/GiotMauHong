@@ -98,9 +98,9 @@ namespace GiotMauHongAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Project v1"));
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("../swagger/v1/swagger.json", "Project v1"));
             app.UseHttpsRedirection();
             app.UseODataBatching();
             app.UseCors(builder =>

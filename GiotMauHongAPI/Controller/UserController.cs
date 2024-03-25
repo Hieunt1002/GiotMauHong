@@ -176,9 +176,6 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                var errorResult = CheckRegistrationErrors(user, errorResponse);
-                if (errorResult != null)
-                    return errorResult;
                 string hash = GetMD5(user.Password);
                 var register = new Users
                 {
@@ -191,6 +188,7 @@ namespace GiotMauHongAPI.Controller
                     District= "",
                     Address= "",
                     Role = 1,
+                    deactive = 1
                 };
 
                 _repository.AddUser(register);
@@ -233,79 +231,22 @@ namespace GiotMauHongAPI.Controller
             {
                 var config = Config.LoadFromFile("appsettings.json");
 
-                var errorResponse = config.ErrorMessages;
-                if (changepass == null || string.IsNullOrEmpty(changepass.email) || string.IsNullOrEmpty(changepass.oldpassword) || string.IsNullOrEmpty(changepass.newpassword))
+                var check = _repository.checkpass(changepass.email, GetMD5(changepass.oldpassword));
+                string hashedNewPassword = GetMD5(changepass.newpassword);
+                var change = new Users
                 {
-                    var error = changepass == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-                else if (!IsValidEmail(changepass.email))
+                    UserId = check.UserId,
+                    Email = changepass.email,
+                    Password = hashedNewPassword,
+                };
+                _repository.ChangePass(change);
+                var successResponse = config.SuccessMessages.ChangePassword;
+                return Ok(new SuccessResponse<string>
                 {
-                    var error = errorResponse.InvalidEmailFormat;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-
-                else if (changepass.newpassword.Length < 6)
-                {
-                    var error = errorResponse.PasswordLength;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-                else if (changepass.oldpassword.Length < 6)
-                {
-                    var error = errorResponse.PasswordLength;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }else
-                {
-                    var check = _repository.checkpass(changepass.email, GetMD5(changepass.oldpassword));
-                    if (check == null)
-                    {
-                        var error = errorResponse.ErrorPassword;
-                        return StatusCode(error.StatusCode, new ErrorMessage
-                        {
-                            StatusCode = error.StatusCode,
-                            Message = error.Message,
-                            ErrorDetails = error.ErrorDetails
-                        });
-                    }
-                    else
-                    {
-                        string hashedNewPassword = GetMD5(changepass.newpassword);
-                        var change = new Users
-                        {
-                            UserId = check.UserId,
-                            Email = changepass.email,
-                            Password = hashedNewPassword,
-                        };
-                        _repository.ChangePass(change);
-                        var successResponse = config.SuccessMessages.ChangePassword;
-                        return Ok(new SuccessResponse<string>
-                        {
-                            StatusCode = successResponse.StatusCode,
-                            Message = successResponse.Message,
-                            Data = change.Email
-                        });
-                    }
-                }
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = change.Email
+                });
             }
             catch
             {
@@ -498,38 +439,6 @@ namespace GiotMauHongAPI.Controller
             try
             {
                 var config = Config.LoadFromFile("appsettings.json");
-
-                var errorResponse = config.ErrorMessages;
-                if (resetpassword == null || string.IsNullOrEmpty(resetpassword.email) || string.IsNullOrEmpty(resetpassword.password) )
-                {
-                    var error = resetpassword == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-                else if (!IsValidEmail(resetpassword.email))
-                {
-                    var error = errorResponse.InvalidEmailFormat;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
-                else if (resetpassword.password.Length < 6)
-                {
-                    var error = errorResponse.PasswordLength;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
                 string hashedNewPassword = GetMD5(resetpassword.password);
                 var change = new Users
                 {
@@ -572,43 +481,7 @@ namespace GiotMauHongAPI.Controller
                 return false;
             }
         }
-        private ActionResult CheckRegistrationErrors(CUser user, ErrorConfig errorResponse)
-        {
-            if (user == null || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
-            {
-                var error = user == null ? errorResponse.BadRequest : errorResponse.EmailPassword;
-                return StatusCode(error.StatusCode, new ErrorMessage
-                {
-                    StatusCode = error.StatusCode,
-                    Message = error.Message,
-                    ErrorDetails = error.ErrorDetails
-                });
-            }
-
-            if (!IsValidEmail(user.Email))
-            {
-                var error = errorResponse.InvalidEmailFormat;
-                return StatusCode(error.StatusCode, new ErrorMessage
-                {
-                    StatusCode = error.StatusCode,
-                    Message = error.Message,
-                    ErrorDetails = error.ErrorDetails
-                });
-            }
-
-            if (user.Password.Length < 6)
-            {
-                var error = errorResponse.PasswordLength;
-                return StatusCode(error.StatusCode, new ErrorMessage
-                {
-                    StatusCode = error.StatusCode,
-                    Message = error.Message,
-                    ErrorDetails = error.ErrorDetails
-                });
-            }
-
-            return null; // Không có lỗi, trả về null
-        }
+        
         [HttpPut]
         [Route("updateProfileVolunteer")]
         [Authorize]
@@ -767,6 +640,38 @@ namespace GiotMauHongAPI.Controller
                     StatusCode = successResponse.StatusCode,
                     Message = successResponse.Message,
                     Data = user.Email
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
+        [HttpPut]
+        [Route("updatedeactive")]
+        public ActionResult updateDeactive(int userid)
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+                var successResponse = config.SuccessMessages.Successfully;
+                var user = new Users
+                {
+                    UserId = userid,
+                    deactive = 0
+                };
+                _repository.updateDeactive(user);
+                return Ok(new SuccessResponse<int>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = userid
                 });
             }
             catch

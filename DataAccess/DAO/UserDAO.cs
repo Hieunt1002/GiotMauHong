@@ -51,7 +51,7 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 user = (from u in connectDB.Users
-                        where u.Email == email && u.Password == password
+                        where u.Email == email && u.Password == password && u.deactive == 1
                         select new Users
                         {
                             UserId = u.UserId,
@@ -412,6 +412,24 @@ namespace DataAccess.DAO
                     use.Ward = users.Ward;
                     use.District = users.District;
                     use.Address = users.Address;
+                    connectDB.Entry(use).State = EntityState.Modified;
+                    connectDB.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public void updateDeactive(Users users)
+        {
+            try
+            {
+                var connectDB = new ConnectDB();
+                var use = connectDB.Users.FirstOrDefault(n => n.UserId == users.UserId);
+                if (use != null)
+                {
+                    use.deactive = users.deactive;
                     connectDB.Entry(use).State = EntityState.Modified;
                     connectDB.SaveChanges();
                 }

@@ -23,6 +23,7 @@ namespace BusinessObject.Model
         public string Ward { get; set;}
         public string District { get; set;}
         public string Address { get; set;}
+        public int deactive { get; set; }
         [Required]
         public int Role { get; set;}
         public virtual Volunteers Volunteers { get; set; }

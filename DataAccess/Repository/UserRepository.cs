@@ -34,5 +34,7 @@ namespace DataAccess.Repository
         public void addnotification(Notification notification) => UserDAO.Instance.addnotification(notification);
 
         public void updateProfile(Users users) => UserDAO.Instance.updateProfile(users);
+
+        public void updateDeactive(Users users) => UserDAO.Instance.updateDeactive(users);
     }
 }
