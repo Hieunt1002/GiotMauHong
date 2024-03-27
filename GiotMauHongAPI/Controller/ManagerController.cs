@@ -16,6 +16,8 @@ namespace GiotMauHongAPI.Controller
     public class ManagerController : ControllerBase
     {
         private IManagerRepository repository = new ManagerRepository();
+        private IUserRepository userRepository = new UserRepository();
+
         public static string GetMD5(string str)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
@@ -38,53 +40,56 @@ namespace GiotMauHongAPI.Controller
             try
             {
                 var config = Config.LoadFromFile("appsettings.json");
-
-                var errorResponse = config.ErrorMessages;
-                if (user == null || user.Img == null || user.Email == null || user.Password == null || user.PhoneNumber == null || user.City == null || user.Ward == null || user.District == null || user.Address == null)
+                var check = userRepository.getUsersid(user.bloodbankid);
+                if(check.Role == 3)
                 {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
+                    string hash = GetMD5(user.Password);
+                    var register = new Users
                     {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
+                        Img = user.Img,
+                        Email = user.Email,
+                        Password = hash,
+                        PhoneNumber = user.PhoneNumber,
+                        City = user.City,
+                        Ward = user.Ward,
+                        District = user.District,
+                        Address = user.Address,
+                        Role = 2,
+                        deactive = 1
+                    };
+
+                    repository.AddUser(register);
+                    var users = repository.getUserid(user.Email);
+                    var volun = new Hospitals
+                    {
+                        Hospitalid = users.UserId,
+                        NameHospital = user.NameHospital,
+                        Bloodbankid = user.bloodbankid
+                    };
+                    repository.AddHospital(volun);
+                    var successResponse = config.SuccessMessages.RegistrationSuccess;
+                    return Ok(new SuccessResponse<string>
+                    {
+                        StatusCode = successResponse.StatusCode,
+                        Message = successResponse.Message,
+                        Data = user.Email
                     });
                 }
-                string hash = GetMD5(user.Password);
-                var register = new Users
+                else
                 {
-                    Img = user.Img,
-                    Email = user.Email,
-                    Password = hash,
-                    PhoneNumber = user.PhoneNumber,
-                    City= user.City,
-                    Ward= user.Ward,
-                    District= user.District,
-                    Address= user.Address,
-                    Role = 2,
-                    deactive = 1
-                };
+                    var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.Bloodbank;
 
-                repository.AddUser(register);
-                var users = repository.getUserid(user.Email);
-                var volun = new Hospitals
-                {
-                    Hospitalid = users.UserId,
-                    NameHospital = user.NameHospital,
-                    Bloodbankid = user.bloodbankid
-                };
-                repository.AddHospital(volun);
-                var successResponse = config.SuccessMessages.RegistrationSuccess;
-                return Ok(new SuccessResponse<string>
-                {
-                    StatusCode = successResponse.StatusCode,
-                    Message = successResponse.Message,
-                    Data = user.Email
-                });
+                    return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = errorResponse.StatusCode,
+                        Message = errorResponse.Message,
+                        ErrorDetails = errorResponse.ErrorDetails
+                    });
+                }
             }
             catch
             {
-                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.Email;
                 return StatusCode(errorResponse.StatusCode, new ErrorMessage
                 {
                     StatusCode = errorResponse.StatusCode,

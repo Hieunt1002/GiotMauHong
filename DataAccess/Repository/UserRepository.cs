@@ -36,5 +36,7 @@ namespace DataAccess.Repository
         public void updateProfile(Users users) => UserDAO.Instance.updateProfile(users);
 
         public void updateDeactive(Users users) => UserDAO.Instance.updateDeactive(users);
+
+        public Users getUsersid(int id) => UserDAO.Instance.getUsersid(id);
     }
 }

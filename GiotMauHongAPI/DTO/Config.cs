@@ -28,6 +28,7 @@ namespace GiotMauHongAPI
         public ErrorMessage ErrorPassword { get; set; }
         public ErrorMessage CheckEmpty { get; set; }
         public ErrorMessage Email { get; set; }
+        public ErrorMessage Bloodbank { get; set; }
     }
 
     public class ErrorMessage

@@ -66,7 +66,7 @@ namespace GiotMauHongAPI.Controller
             }
             catch
             {
-                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.Email;
                 return StatusCode(errorResponse.StatusCode, new ErrorMessage
                 {
                     StatusCode = errorResponse.StatusCode,

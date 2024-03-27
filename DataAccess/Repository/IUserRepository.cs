@@ -23,5 +23,6 @@ namespace DataAccess.Repository
         void addnotification(Notification notification);
         void updateProfile(Users users);
         void updateDeactive(Users users);
+        Users getUsersid(int id);
     }
 }
