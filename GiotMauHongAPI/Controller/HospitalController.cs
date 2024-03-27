@@ -63,6 +63,53 @@ namespace GiotMauHongAPI.Controller
                 });
             }
         }
+        [HttpGet]
+        [Route("getRequestbyid")]
+        [Authorize]
+        public ActionResult<Requests> getRequestbyid(int id)
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+
+                var errorResponse = config.ErrorMessages;
+                if (id == 0)
+                {
+                    var error = errorResponse.CheckEmpty;
+                    return StatusCode(error.StatusCode, new ErrorMessage
+                    {
+                        StatusCode = error.StatusCode,
+                        Message = error.Message,
+                        ErrorDetails = error.ErrorDetails
+                    });
+                }
+                var r = repository.GetRequestsByid(id);
+                if (r == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var successResponse = config.SuccessMessages.Successfully;
+                    return Ok(new SuccessResponse<Requests>
+                    {
+                        StatusCode = successResponse.StatusCode,
+                        Message = successResponse.Message,
+                        Data = r
+                    });
+                }
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
         [HttpPost]
         [Route("AddRequest")]
         [Authorize]

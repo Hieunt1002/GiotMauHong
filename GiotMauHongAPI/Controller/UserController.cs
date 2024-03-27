@@ -101,7 +101,7 @@ namespace GiotMauHongAPI.Controller
                             Data = new Users
                             {
                                 Email = "admin@gmail.com",
-                                Role = 0
+                                Role = 4
                             }
                         });
                     }
@@ -212,7 +212,7 @@ namespace GiotMauHongAPI.Controller
             }
             catch
             {
-                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.Email;
                 return StatusCode(errorResponse.StatusCode, new ErrorMessage
                 {
                     StatusCode = errorResponse.StatusCode,
