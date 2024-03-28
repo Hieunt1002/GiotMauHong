@@ -41,7 +41,7 @@ namespace DataAccess.DAO
                             from d in registerGroup.DefaultIfEmpty()
                             where (r.RequestDate >= startdate && r.RequestDate <= enddate) &&
                                   (volunteerid == 0 || r.City == connectDB.Users.FirstOrDefault(u => u.UserId == volunteerid).City) &&
-                                  r.status != 0
+                                  r.status == 1
                             select new ViewRequest
                             {
                                 Requestid = r.Requestid,

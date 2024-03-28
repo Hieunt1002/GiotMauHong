@@ -182,7 +182,7 @@ namespace GiotMauHongAPI.Controller
                     Email = user.Email,
                     Password = hash,
                     Img = "",
-                    PhoneNumber = "",
+                    PhoneNumber = user.PhoneNumber,
                     City = "",
                     Ward= "",
                     District= "",
@@ -196,9 +196,10 @@ namespace GiotMauHongAPI.Controller
                 var volun = new Volunteers
                 {
                     Volunteerid = users.UserId,
-                    CCCD = "000000000001",
-                    Fullname = "null",
-                    Gender = 0
+                    Birthdate = user.Birthdate,
+                    CCCD = user.CCCD,
+                    Fullname = user.CCCD,
+                    Gender = user.Gender
                 };
                 _repository.AddVolunteers(volun);
 
