@@ -255,6 +255,35 @@ namespace DataAccess.DAO
             }
             return hospitals;
         }
-
+        public IEnumerable<Users> GetListAllHospital()
+        {
+            List<Users> hospitals;
+            try
+            {
+                var connectDB = new ConnectDB();
+                hospitals = (from u in connectDB.Users
+                             join h in connectDB.Hospitals on u.UserId equals h.Hospitalid
+                             where u.Role == 2
+                             select new Users
+                             {
+                                 UserId = u.UserId,
+                                 Img = u.Img,
+                                 Email = u.Email,
+                                 PhoneNumber = u.PhoneNumber,
+                                 City = u.City,
+                                 Ward = u.Ward,
+                                 District = u.District,
+                                 Address = u.Address,
+                                 Role = u.Role,
+                                 Hospitals = h,
+                                 deactive = u.deactive
+                             }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return hospitals;
+        }
     }
 }

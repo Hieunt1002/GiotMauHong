@@ -4,6 +4,7 @@
     {
         public int Hospitalid { get; set; }
         public DateTime Datesend { get; set; }
+        public int Bloodtypeid { get; set; }
 
         public List<QuantitySendDTO> QuantitySend { get; set; } = new List<QuantitySendDTO>();
     }

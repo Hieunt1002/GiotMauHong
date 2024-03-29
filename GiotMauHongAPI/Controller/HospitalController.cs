@@ -381,17 +381,6 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                if (addSendBloodDTO == null || addSendBloodDTO.Hospitalid == 0  || 
-                    addSendBloodDTO.Datesend == null || addSendBloodDTO.QuantitySend == null)
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
                 var bloodbank = userRepository.getProfile(addSendBloodDTO.Hospitalid);
                 var send = new SendBlood
                 {
@@ -420,7 +409,7 @@ namespace GiotMauHongAPI.Controller
                         {
                             numberbloodid = s.numberbloodid,
                             SendBloodid = id,
-                            Bloodtypeid = s.Bloodtypeid,
+                            Bloodtypeid = addSendBloodDTO.Bloodtypeid,
                             quantity = s.quantity
                         };
                         repository.QuantitySendBlood(q);
@@ -463,17 +452,6 @@ namespace GiotMauHongAPI.Controller
                 var config = Config.LoadFromFile("appsettings.json");
 
                 var errorResponse = config.ErrorMessages;
-                if (addTakeBloodDTO == null || addTakeBloodDTO.Hospitalid == 0 || 
-                    addTakeBloodDTO.Datetake == null || addTakeBloodDTO.QuantityTake == null)
-                {
-                    var error = errorResponse.CheckEmpty;
-                    return StatusCode(error.StatusCode, new ErrorMessage
-                    {
-                        StatusCode = error.StatusCode,
-                        Message = error.Message,
-                        ErrorDetails = error.ErrorDetails
-                    });
-                }
                 var bloodbank = userRepository.getProfile(addTakeBloodDTO.Hospitalid);
                 var send = new Takebloods
                 {
@@ -502,7 +480,7 @@ namespace GiotMauHongAPI.Controller
                         {
                             numberbloodid = s.numberbloodid,
                             Takebloodid = id,
-                            Bloodtypeid = s.Bloodtypeid,
+                            Bloodtypeid = addTakeBloodDTO.Bloodtypeid,
                             quantity = s.quantity
                         };
                         repository.QuantityTakeBlood(q);

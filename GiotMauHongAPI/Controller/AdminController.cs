@@ -315,5 +315,33 @@ namespace GiotMauHongAPI.Controller
                 });
             }
         }
+        [HttpGet]
+        [Route("listHospital")]
+        [Authorize]
+        public ActionResult<IEnumerable<Users>> GetHospital()
+        {
+            try
+            {
+                var config = Config.LoadFromFile("appsettings.json");
+                var user = repository.GetListAllHospital();
+                var successResponse = config.SuccessMessages.Successfully;
+                return Ok(new SuccessResponse<IEnumerable<Users>>
+                {
+                    StatusCode = successResponse.StatusCode,
+                    Message = successResponse.Message,
+                    Data = user
+                });
+            }
+            catch
+            {
+                var errorResponse = Config.LoadFromFile("appsettings.json").ErrorMessages.InternalServerError;
+                return StatusCode(errorResponse.StatusCode, new ErrorMessage
+                {
+                    StatusCode = errorResponse.StatusCode,
+                    Message = errorResponse.Message,
+                    ErrorDetails = errorResponse.ErrorDetails
+                });
+            }
+        }
     }
 }

@@ -21,5 +21,6 @@ namespace DataAccess.Repository
         Users GetUserByEmail(string email);
         int GetActive();
         IEnumerable<Users> GetListBloodbank();
+        IEnumerable<Users> GetListAllHospital();
     }
 }
