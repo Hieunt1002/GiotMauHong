@@ -156,12 +156,24 @@ namespace DataAccess.DAO
             {
                 using (var connectDB = new ConnectDB())
                 {
-                    var existingNotification = connectDB.Notification.FirstOrDefault(n => n.Userid == notification.Userid);
-                    if (existingNotification != null)
+                    List<Notification> notifications = connectDB.Notification.Where(c => c.Userid == notification.Userid && c.status == 0).ToList();
+                    if(notifications != null)
                     {
-                        existingNotification.status = notification.status;
-                        connectDB.Entry(existingNotification).State = EntityState.Modified;
-                        connectDB.SaveChanges();
+                        foreach(var item in notifications)
+                        {
+                            var existingNotification = connectDB.Notification.FirstOrDefault(n => n.NotificationId == item.NotificationId);
+                            if (existingNotification != null)
+                            {
+                                existingNotification.status = notification.status;
+                                connectDB.Entry(existingNotification).State = EntityState.Modified;
+                                connectDB.SaveChanges();
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Notification not found", nameof(notification.NotificationId));
+                            }
+                        }
+
                     }
                     else
                     {

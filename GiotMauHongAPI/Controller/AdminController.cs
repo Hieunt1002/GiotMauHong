@@ -105,7 +105,7 @@ namespace GiotMauHongAPI.Controller
             }
         }
         [HttpGet] 
-        [Route("lisbloodbank")]
+        [Route("listHospital")]
         [Authorize]
         public ActionResult<IEnumerable<Users>> lisbloodbank()
         {
@@ -316,7 +316,7 @@ namespace GiotMauHongAPI.Controller
             }
         }
         [HttpGet]
-        [Route("listHospital")]
+        [Route("lisbloodbank")]
         [Authorize]
         public ActionResult<IEnumerable<Users>> GetHospital()
         {
