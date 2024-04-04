@@ -198,7 +198,7 @@ namespace GiotMauHongAPI.Controller
                     Volunteerid = users.UserId,
                     Birthdate = user.Birthdate,
                     CCCD = user.CCCD,
-                    Fullname = user.CCCD,
+                    Fullname = user.Fullname,
                     Gender = user.Gender
                 };
                 _repository.AddVolunteers(volun);
