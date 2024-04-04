@@ -76,7 +76,7 @@ namespace GiotMauHongAPI.Controller
                     });
                 }
 
-                else if (login.password.Length < 6)
+                else if (login.password.Length < 8)
                 {
                     var error = errorResponse.PasswordLength;
                     return StatusCode(error.StatusCode, new ErrorMessage
