@@ -295,7 +295,13 @@ namespace DataAccess.DAO
                         District = v.District,
                         Address = v.Address,
                         Role = v.Role,
-                        Hospitals = connectDB.Hospitals.FirstOrDefault(f => f.Hospitalid == v.UserId)
+                        Hospitals = connectDB.Hospitals.Where(h => h.Hospitalid == v.UserId).Select(f => new Hospitals
+                        {
+                            Hospitalid = f.Hospitalid,
+                            NameHospital= f.NameHospital,
+                            Bloodbankid= f.Bloodbankid,
+                            Requests= connectDB.Requests.Where(c => c.Hospitalid == f.Hospitalid).ToList()
+                        }).FirstOrDefault()
                     }).FirstOrDefault();
                 }
                 else

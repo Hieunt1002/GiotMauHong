@@ -117,16 +117,14 @@ namespace DataAccess.DAO
                 return false;
             }
         }
-        public int Check(int id)
+        private int listvolunteerid(int volunteerid)
         {
             int status = 0;
             try
             {
                 var connectDB = new ConnectDB();
-                status = (from c in connectDB.Registers
-                          join r in connectDB.Requests on c.Requestid equals r.Requestid
-                          where ((r.RequestDate <= DateTime.Now && c.Quantity == 0) 
-                          || r.RequestDate <= DateTime.Now.AddMonths(-3)) && c.Volunteerid == id
+                status = (from  c in connectDB.Registers
+                          where c.Volunteerid == volunteerid
                           select c
                           ).Count();
             }
@@ -136,6 +134,61 @@ namespace DataAccess.DAO
             }
             return status;
         }
+        public int Check(int id)
+        {
+            int status = 0;
+            try
+            {
+                int check = listvolunteerid(id);
+                if (check != 0)
+                {
+                    var connectDB = new ConnectDB();
+                    var latestRegistrationDate = (from v in connectDB.Volunteers
+                                                  join c in connectDB.Registers on v.Volunteerid equals c.Volunteerid
+                                                  join r in connectDB.Requests on c.Requestid equals r.Requestid
+                                                  where (r.RequestDate <= DateTime.Now && c.Quantity == 0)
+                                                         && v.Volunteerid == id
+                                                  orderby r.RequestDate descending
+                                                  select r.RequestDate
+                             ).Take(1)
+                              .FirstOrDefault();
+                    if (latestRegistrationDate == DateTime.MinValue)
+                    {
+                        var checks = (from v in connectDB.Volunteers
+                                      join c in connectDB.Registers on v.Volunteerid equals c.Volunteerid
+                                      join r in connectDB.Requests on c.Requestid equals r.Requestid
+                                      where v.Volunteerid == id
+                                      orderby r.RequestDate descending
+                                      select r.RequestDate
+                             ).Take(1)
+                              .FirstOrDefault();
+                        if (checks <= DateTime.Now.AddMonths(-3))
+                        {
+                            status = 1;
+                        }
+                        else
+                        {
+                            status = 0;
+                        }
+                    }
+                    else
+                    {
+                        status = 1;
+                    }
+
+                }
+                else
+                {
+                    status = 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred while registering request", ex);
+            }
+            return status;
+        }
+
         public IEnumerable<Notification> GetNotifications(int id)
         {
             List <Notification> notifications = null;
