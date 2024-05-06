@@ -16,6 +16,8 @@ namespace GiotMauHongAPI.Controller
     {
         private IVolunteerRepository repository = new VolunteerRepository();
         private IUserRepository userRepository = new UserRepository();
+        private IHospitalRepository repositoryHospital = new HospitalRepository();
+
         [HttpGet]
         [Route("searchrequest")]
         public ActionResult<IEnumerable<ViewRequest>> searchrequest(DateTime startdate, DateTime enddate, int volunteerid)
@@ -58,10 +60,11 @@ namespace GiotMauHongAPI.Controller
                     Bloodtypeid = 1
                 };
                 await repository.regesterRequest(r);
+                var rq = repositoryHospital.GetRequestsByid(register.Requestid);
                 var n = new Notification
                 {
                     Userid = r.Volunteerid,
-                    Content = "Bạn đã đăng ký thành công xin vui lòng bạn đến đúng ngày để tham gia buổi hiến máu một cách trọn vẹn nhất",
+                    Content = "Bạn đã đăng ký thành công xin vui lòng ngày: "+rq.RequestDate+" bạn đến đúng ngày để tham gia buổi hiến máu một cách trọn vẹn nhất",
                     Datepost = DateTime.Now.ToString(),
                     status = 0
                 };
