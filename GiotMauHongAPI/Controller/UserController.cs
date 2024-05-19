@@ -339,8 +339,8 @@ namespace GiotMauHongAPI.Controller
             }
         }
         [HttpPost]
-        [Route("forgotpass/{email}")]
-        public async Task<ActionResult> ForgotPassword(string email)
+        [Route("forgotpass")]
+        public async Task<ActionResult> ForgotPassword(ForgotDTO email)
         {
             try
             {
@@ -357,7 +357,7 @@ namespace GiotMauHongAPI.Controller
                         ErrorDetails = error.ErrorDetails
                     });
                 }
-                else if (!IsValidEmail(email))
+                else if (!IsValidEmail(email.Email))
                 {
                     var errorResponses = config.ErrorMessages.BadRequest;
                     return BadRequest(new ErrorMessage
@@ -368,10 +368,10 @@ namespace GiotMauHongAPI.Controller
                     });
                 }
 
-                var token = GenerateTokenForgot(email);
-                var resetLink = "https://localhost:3000/resetpassword/" + token;
+                var token = GenerateTokenForgot(email.Email);
+                var resetLink = "http://localhost:3000/resetpassword/" + token;
                 var emailContent = GetResetPasswordEmailContent(resetLink);
-                var forgot = await _repository.forgotpass(email, emailContent);
+                var forgot = await _repository.forgotpass(email.Email, emailContent);
 
                 var successResponse = config.SuccessMessages.ResetPasswordEmailSent;
                 return Ok(new SuccessResponse<string>
@@ -434,7 +434,6 @@ namespace GiotMauHongAPI.Controller
         }
         [HttpPut]
         [Route("resetPass")]
-        [Authorize]
         public ActionResult resetPass(resetpassword resetpassword)
         {
             try

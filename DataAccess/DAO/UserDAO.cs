@@ -390,11 +390,11 @@ namespace DataAccess.DAO
             {
                 using (var connectDB = new ConnectDB())
                 {
-                    var email = GetUserByEmail(users.Email);
-                    if (email != null)
+                    var use = connectDB.Users.FirstOrDefault(n => n.Email == users.Email);
+                    if (use != null)
                     {
-                        email.Password = users.Password;
-                        connectDB.Entry(email).State = EntityState.Modified;
+                        use.Password = users.Password;
+                        connectDB.Entry(use).State = EntityState.Modified;
                         connectDB.SaveChanges();
                     }
                 }

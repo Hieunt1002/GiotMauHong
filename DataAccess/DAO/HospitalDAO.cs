@@ -189,18 +189,19 @@ namespace DataAccess.DAO
                         Quantity = b.Quantity,
                         Volunteers = connectDB.Volunteers.Where(u => u.Volunteerid == b.Volunteerid).Select(p => new Volunteers
                         {
-                            Volunteerid= p.Volunteerid,
-                            Birthdate= p.Birthdate,
-                            CCCD =p.CCCD,
-                            Fullname= p.Fullname,
-                            Gender= p.Gender,
-                            Users = connectDB.Users.FirstOrDefault(m=>m.UserId == p.Volunteerid)
+                            Volunteerid = p.Volunteerid,
+                            Birthdate = p.Birthdate,
+                            CCCD = p.CCCD,
+                            Fullname = p.Fullname,
+                            Gender = p.Gender,
+                            Users = connectDB.Users.FirstOrDefault(m => m.UserId == p.Volunteerid)
                         }).FirstOrDefault(),
                         Bloodtypes = connectDB.Bloodtypes.FirstOrDefault(z => z.Bloodtypeid == b.Bloodtypeid)
                     }).ToList(),
                     status = c.status
                 }).FirstOrDefault();
-            }catch(Exception ex) { throw new Exception(ex.Message); }
+            }
+            catch (Exception ex) { throw new Exception(ex.Message); }
             return request;
         }
         public Requests listhadvolunteerregister(int id)
@@ -285,7 +286,8 @@ namespace DataAccess.DAO
                 var connectDB = new ConnectDB();
                 connectDB.SendBlood.Add(sendBlood);
                 connectDB.SaveChanges();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -324,7 +326,8 @@ namespace DataAccess.DAO
                 var connectDB = new ConnectDB();
                 id = (from c in connectDB.Takebloods
                       where c.Hospitalid == hopitalid && c.Status == 0
-                      select c.Takebloodid).FirstOrDefault();
+                      orderby c.Takebloodid descending
+                      select c.Takebloodid).Take(1).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -339,9 +342,13 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 id = (from c in connectDB.SendBlood
-                      where c.Hospitalid == hopitalid && c.Status == 0
-                      select c.SendBloodid).FirstOrDefault();
-            }catch(Exception ex)
+                          where c.Hospitalid == hopitalid && c.Status == 0
+                          orderby c.SendBloodid descending
+                          select c.SendBloodid
+                          ).Take(1).FirstOrDefault();
+
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -354,7 +361,8 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 numberBloods = connectDB.NumberBlood.ToList();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -367,7 +375,8 @@ namespace DataAccess.DAO
                 var connectDB = new ConnectDB();
                 connectDB.QuantitySend.Add(quantitySend);
                 connectDB.SaveChanges();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -391,7 +400,7 @@ namespace DataAccess.DAO
                     throw new ArgumentException("Regiter not found", nameof(s.SendBloodid));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -430,7 +439,7 @@ namespace DataAccess.DAO
                 if (s != null)
                 {
                     connectDB.SendBlood.Remove(s);
-                    if(a != null)
+                    if (a != null)
                     {
                         connectDB.QuantitySend.Remove(a);
                     }
@@ -508,7 +517,8 @@ namespace DataAccess.DAO
                         Bloodtypes = connectDB.Bloodtypes.Where(b => b.Bloodtypeid == a.Bloodtypeid).FirstOrDefault()
                     }).ToList()
                 }).ToList();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -706,11 +716,19 @@ namespace DataAccess.DAO
                                                       {
                                                           numberbloodid = nb.numberbloodid,
                                                           quantity = nb.quantity,
-                                                          total = connectDB.QuantitySend.Where(s => s.Bloodtypeid == b.Bloodtypeid && s.numberbloodid == nb.numberbloodid).Sum(t => t.quantity) - 
-                                                          connectDB.QuantityTake.Where(s => s.Bloodtypeid == b.Bloodtypeid && s.numberbloodid == nb.numberbloodid).Sum(t => t.quantity)
-                                                      }).ToList()
+                                                          total = connectDB.QuantitySend
+                                                                    .Where(s => s.Bloodtypeid == b.Bloodtypeid && s.numberbloodid == nb.numberbloodid)
+                                                                    .Sum(t => t.quantity) -
+                                                                  connectDB.QuantityTake
+                                                                    .Where(s => s.Bloodtypeid == b.Bloodtypeid && s.numberbloodid == nb.numberbloodid)
+                                                                    .Sum(t => t.quantity)
+                                                      })
+                      .GroupBy(t => new { t.numberbloodid, t.quantity, t.total })
+                      .Select(g => g.First()) 
+                      .ToList()
                                 }).ToList();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
