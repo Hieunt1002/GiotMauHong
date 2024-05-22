@@ -128,11 +128,11 @@ namespace DataAccess.DAO
 
                     if (user != null)
                     {
-                        await MailUtils.SendMailGoogleSmtp("nguyenanh0978638@gmail.com",
+                        await MailUtils.SendMailGoogleSmtp("loclhde150242@fpt.edu.vn",
                               user.Email,
                               "Forgot Password",
                               content,
-                              "nguyenanh0978638@gmail.com", "kxnutqxwydifngae");
+                              "loclhde150242@fpt.edu.vn", "wkjkparmndknolv");
                         result = "Email sent successfully.";
                     }
                     else

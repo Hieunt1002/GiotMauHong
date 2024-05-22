@@ -218,7 +218,7 @@ namespace GiotMauHongAPI.Controller
                 {
                     StatusCode = errorResponse.StatusCode,
                     Message = errorResponse.Message,
-                    ErrorDetails = errorResponse.ErrorDetails
+                    ErrorDetails = errorResponse.Message
                 });
             }
         }
@@ -369,7 +369,7 @@ namespace GiotMauHongAPI.Controller
                 }
 
                 var token = GenerateTokenForgot(email.Email);
-                var resetLink = "http://localhost:3000/resetpassword/" + token;
+                var resetLink = "https://www.hienmaugiotmauhong.online/resetpassword/" + token;
                 var emailContent = GetResetPasswordEmailContent(resetLink);
                 var forgot = await _repository.forgotpass(email.Email, emailContent);
 

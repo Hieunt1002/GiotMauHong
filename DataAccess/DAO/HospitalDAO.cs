@@ -487,7 +487,7 @@ namespace DataAccess.DAO
             try
             {
                 var connectDB = new ConnectDB();
-                sendBloods = connectDB.SendBlood.Where(i => i.Hospitalid == id).Select(s => new SendBlood
+                sendBloods = connectDB.SendBlood.Where(i => i.Bloodbankid == id).Select(s => new SendBlood
                 {
                     SendBloodid = s.SendBloodid,
                     Hospitalid = s.Hospitalid,
@@ -616,7 +616,7 @@ namespace DataAccess.DAO
             try
             {
                 var connectDB = new ConnectDB();
-                sendBloods = connectDB.Takebloods.Where(i => i.Hospitalid == id).Select(s => new Takebloods
+                sendBloods = connectDB.Takebloods.Where(i => i.Bloodbankid == id).Select(s => new Takebloods
                 {
                     Takebloodid = s.Takebloodid,
                     Hospitalid = s.Hospitalid,
@@ -635,7 +635,7 @@ namespace DataAccess.DAO
                         NameBloodbank = h.NameBloodbank,
                         Users = connectDB.Users.Where(u => u.UserId == h.Bloodbankid).FirstOrDefault()
                     }).FirstOrDefault(),
-                    QuantityTake = connectDB.QuantityTake.Where(q => q.quantitytakeid == s.Takebloodid).Select(a => new QuantityTake
+                    QuantityTake = connectDB.QuantityTake.Where(q => q.Takebloodid == s.Takebloodid).Select(a => new QuantityTake
                     {
                         quantitytakeid = a.quantitytakeid,
                         numberbloodid = a.numberbloodid,
@@ -711,7 +711,7 @@ namespace DataAccess.DAO
                                     totalBloodDTOs = (from nb in connectDB.NumberBlood
                                                       join qs in connectDB.QuantitySend on nb.numberbloodid equals qs.numberbloodid
                                                       join c in connectDB.SendBlood on qs.SendBloodid equals c.SendBloodid
-                                                      where qs.Bloodtypeid == b.Bloodtypeid && c.Hospitalid == id
+                                                      where qs.Bloodtypeid == b.Bloodtypeid && c.Hospitalid == id && c.Status == 1
                                                       select new TotalBloodDTO
                                                       {
                                                           numberbloodid = nb.numberbloodid,

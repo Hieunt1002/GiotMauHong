@@ -89,11 +89,11 @@ namespace DataAccess.DAO
                 var u = await user.getUserid(registers.Volunteerid);
                 if (IsValidEmail(u.Email))
                 {
-                    await MailUtils.SendMailGoogleSmtp("nguyenanh0978638@gmail.com",
+                    await MailUtils.SendMailGoogleSmtp("loclhde150242@fpt.edu.vn",
                           u.Email,
                           "Đăng ký hiến máu",
                           "Chúc mừng bạn đã đăng ký thành công. Vui lòng đến đúng ngày và thời gian để tham gia hiến máu.",
-                          "nguyenanh0978638@gmail.com", "kxnutqxwydifngae");
+                          "loclhde150242@fpt.edu.vn", "wkjkparmndknolv");
                 }
                 else
                 {
