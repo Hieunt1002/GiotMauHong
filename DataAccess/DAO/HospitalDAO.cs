@@ -711,7 +711,7 @@ namespace DataAccess.DAO
                                     totalBloodDTOs = (from nb in connectDB.NumberBlood
                                                       join qs in connectDB.QuantitySend on nb.numberbloodid equals qs.numberbloodid
                                                       join c in connectDB.SendBlood on qs.SendBloodid equals c.SendBloodid
-                                                      where qs.Bloodtypeid == b.Bloodtypeid && c.Hospitalid == id && c.Status == 1
+                                                      where qs.Bloodtypeid == b.Bloodtypeid && (c.Hospitalid == id || c.Bloodbankid == id) && c.Status == 1
                                                       select new TotalBloodDTO
                                                       {
                                                           numberbloodid = nb.numberbloodid,
