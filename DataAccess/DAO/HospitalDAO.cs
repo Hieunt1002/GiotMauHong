@@ -151,6 +151,15 @@ namespace DataAccess.DAO
             {
                 var connectDB = new ConnectDB();
                 var d = connectDB.Requests.FirstOrDefault(r => r.Requestid == id && r.RequestDate > DateTime.Now);
+                var r = connectDB.Registers.Where(c => c.Requestid == id).ToList();
+                if(r != null)
+                {
+                    foreach(var a in r)
+                    {
+                        connectDB.Registers.Remove(a);
+                        connectDB.SaveChanges();
+                    }
+                }
                 if (d != null)
                 {
                     connectDB.Requests.Remove(d);

@@ -61,11 +61,13 @@ namespace GiotMauHongAPI.Controller
                 };
                 await repository.regesterRequest(r);
                 var rq = repositoryHospital.GetRequestsByid(register.Requestid);
+                DateTime timeObj = DateTime.Parse(rq.Starttime, null, System.Globalization.DateTimeStyles.RoundtripKind);
+                DateTime newTimeObj = timeObj.AddHours(7);
                 var n = new Notification
                 {
                     Userid = r.Volunteerid,
-                    Content = "Bạn đã đăng ký thành công xin vui lòng ngày: "+rq.RequestDate+" bạn đến đúng ngày để tham gia buổi hiến máu một cách trọn vẹn nhất",
-                    Datepost = DateTime.Now.ToString(),
+                    Content = $"Bạn đã đăng ký thành công xin vui lòng ngày: {rq.RequestDate:yyyy-MM-dd} và đến trước: {newTimeObj:HH:mm} bạn đến đúng ngày để tham gia buổi hiến máu một cách trọn vẹn nhất",
+                    Datepost = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                     status = 0
                 };
                 userRepository.addnotification(n);

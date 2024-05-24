@@ -132,7 +132,7 @@ namespace DataAccess.DAO
                               user.Email,
                               "Forgot Password",
                               content,
-                              "loclhde150242@fpt.edu.vn", "wkjkparmndknolv");
+                              "loclhde150242@fpt.edu.vn", "azokadgznxzmqzky");
                         result = "Email sent successfully.";
                     }
                     else

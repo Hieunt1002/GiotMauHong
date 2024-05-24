@@ -93,7 +93,7 @@ namespace DataAccess.DAO
                           u.Email,
                           "Đăng ký hiến máu",
                           "Chúc mừng bạn đã đăng ký thành công. Vui lòng đến đúng ngày và thời gian để tham gia hiến máu.",
-                          "loclhde150242@fpt.edu.vn", "wkjkparmndknolv");
+                          "loclhde150242@fpt.edu.vn", "azokadgznxzmqzky");
                 }
                 else
                 {
